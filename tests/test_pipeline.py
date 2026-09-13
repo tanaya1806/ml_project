@@ -3,6 +3,7 @@ Unit Tests for ABIDE I Data Loader, Sliding-Window FC, and Temporal Graph Constr
 """
 
 import os
+import yaml
 import pytest
 import numpy as np
 
@@ -10,12 +11,14 @@ from src.data.loader import ABIDELoader, SubjectRecord
 from src.data.sliding_window import compute_pearson_fc, compute_sliding_window_fc, WindowFC
 from src.data.graph_construction import sparsify_fc_matrix, construct_temporal_graphs, TemporalGraph
 
-
-DATA_DIR = r"D:\Graph anomaly detection\data\raw\Time_serie_per_site"
+_CFG = yaml.safe_load(open(os.path.join(os.path.dirname(__file__), "..", "configs", "baseline.yaml")))
+DATA_DIR = _CFG["dataset"]["ts_dir"]
 
 
 @pytest.fixture
 def loader():
+    if not os.path.isdir(DATA_DIR):
+        pytest.skip(f"Raw ABIDE time-series directory not found locally: {DATA_DIR}")
     return ABIDELoader(DATA_DIR)
 
 

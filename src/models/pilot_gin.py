@@ -14,7 +14,7 @@ from torch_geometric.data import Batch
 from src.graphs.subgraph_extraction import extract_all_seed_subgraphs_for_window
 from src.models.gin_encoder import GINEncoder, subgraph_to_pyg
 
-GRAPH_DIR = r"D:\Graph anomaly detection\data\processed\graphs"
+GRAPH_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "processed", "graphs")
 
 def run_pilot():
     print("Starting M3 GIN Pilot Experiment...")

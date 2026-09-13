@@ -31,9 +31,12 @@ from src.graphs.temporal_tracking import (
 )
 
 
+_REPO_ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
+
+
 def run_pilot_experiment(
-    graph_dir: str = r"D:\Graph anomaly detection\data\processed\graphs",
-    output_report_path: str = r"D:\Graph anomaly detection\data\processed\metadata\subgraph_pilot_report.json",
+    graph_dir: str = os.path.join(_REPO_ROOT, "data", "processed", "graphs"),
+    output_report_path: str = os.path.join(_REPO_ROOT, "data", "processed", "metadata", "subgraph_pilot_report.json"),
     k: int = 1
 ) -> Dict[str, Any]:
     process = psutil.Process(os.getpid())

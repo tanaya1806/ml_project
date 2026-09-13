@@ -4,6 +4,7 @@ Unit Tests for Candidate k-Hop Subgraph Extraction and Temporal Tracking.
 
 import os
 import glob
+import yaml
 import pytest
 import numpy as np
 
@@ -20,7 +21,8 @@ from src.graphs.temporal_tracking import (
     compute_subgraph_trajectory_metrics,
 )
 
-GRAPH_DIR = r"D:\Graph anomaly detection\data\processed\graphs"
+_CFG = yaml.safe_load(open(os.path.join(os.path.dirname(__file__), "..", "configs", "baseline.yaml")))
+GRAPH_DIR = _CFG["dataset"]["graphs_dir"]
 
 
 @pytest.fixture(scope="module")
