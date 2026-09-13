@@ -1,0 +1,49 @@
+# Baseline Configuration for Temporal Functional Connectivity & Graph Construction
+# Milestone: ABIDE rs-fMRI -> Sliding-Window FC -> Temporal Graph Sequences
+
+project:
+  name: "GRAPH_ANOMALY"
+  research_topic: "Few-Shot Temporal Subgraph Anomaly Detection in Functional Brain Networks"
+  dataset: "ABIDE I"
+
+dataset:
+  raw_data_dir: "data/raw"
+  ts_dir: "data/raw/Time_serie_per_site"
+  phenotypic_file: "data/raw/abide/Phenotypic_V1_0b_preprocessed1.csv"
+  processed_dir: "data/processed"
+  fc_dir: "data/processed/fc"
+  graphs_dir: "data/processed/graphs"
+  metadata_dir: "data/processed/metadata"
+  figures_dir: "outputs/figures"
+
+preprocessing:
+  roi_count: 360
+  connectivity_metric: "pearson"
+  window_size: 30       # Window length in TRs (timepoints)
+  stride: 10            # Step size between consecutive windows
+  remove_diagonal: true # Diagonal set to 0.0 (no self-loops)
+  clip_range: [-1.0, 1.0]
+
+graph_construction:
+  threshold_mode: "absolute_magnitude" # Select top-k based on |r|
+  sparsity_ratio: 0.20                 # Top 20% strongest connections
+  keep_signed_weights: true            # Retain original signed Pearson r as edge_weight
+  symmetric: true                      # Ensure undirected edge symmetry: (u, v) and (v, u)
+  remove_self_loops: true
+
+splitting:
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  stratify_by: "label"
+  random_seed: 42
+
+subgraphs:
+  method: "k_hop"
+  k: 1                                   # Hop radius (baseline: 1, configurable for 2)
+  seed_strategy: "all_rois"              # Baseline: all 360 ROIs evaluated
+  tracking_strategy: "stable"            # 'stable' (fixed ROI identity over time) or 'dynamic' (evolving membership)
+  ref_window_idx: 0                      # Reference window for stable tracking (t=0)
+  num_total_rois: 360
+  storage_mode: "on_the_fly"             # 'on_the_fly' from parent graphs (1.4 GB) to avoid 114 GB storage overhead
+
