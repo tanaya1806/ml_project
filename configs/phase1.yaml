@@ -1,0 +1,58 @@
+# Phase 1 Configuration: Normal Temporal Representation + Baseline Detection
+# Builds on configs/baseline.yaml (M1 graphs, M2 stable subgraphs, M3 GIN).
+
+seeds:
+  # M2's candidate generator supports all 360 ROIs as seeds ("seed_strategy: all_rois").
+  # Training/evaluating a GIN+GRU model on all 360 seeds x all subjects is not tractable
+  # on a single laptop (M2 pilot measured ~71s/subject to extract 360 seeds across all
+  # windows -> ~12h just for extraction over the 609 train subjects, repeated every epoch).
+  # We therefore train/evaluate on a fixed, deterministic, stratified subsample of seed
+  # ROIs spanning the cortex, cached once to disk (see subgraph_cache). This is a compute
+  # budget decision, not a change to M2's candidate-generation capability.
+  num_seeds: 20
+  selection_seed: 42
+
+cache:
+  dir: "data/processed/subgraph_cache"
+
+gin:
+  in_channels: 1
+  hidden_channels: 64
+  embedding_dim: 128
+  num_layers: 2
+
+gru:
+  hidden_dim: 128
+  num_layers: 1
+
+training:
+  # GIN is trained end-to-end (not pretrained separately) using the GRU next-embedding
+  # prediction loss as the sole objective. This is the simplest defensible strategy:
+  # it avoids a second self-supervised pretext task (contrastive/GAN/etc.) while still
+  # forcing the GIN weights to move away from their random initialization toward
+  # embeddings that make normal temporal dynamics predictable.
+  epochs: 5
+  lr: 0.001
+  weight_decay: 0.0
+  optimizer: adam
+  batch_size: 16          # (subject, seed) sequences pooled per gradient step
+  lambda_var: 0.5         # VICReg-style collapse guard weight (see train_phase1.py)
+  train_subject_pool: "train_control"  # normal temporal model uses TC subjects only
+  random_seed: 42
+
+anomaly:
+  threshold_percentile: 95  # tau = percentile_95(A_normal_validation)
+
+fewshot:
+  shots: [1, 5, 10]
+  num_support_seeds: 5  # number of independent support-set draws per shot count
+  support_pool: "train_asd"  # never test subjects
+  random_seed: 42
+
+evaluation:
+  test_pool: "test_all"  # test_control + test_asd, held out and untouched until here
+  subject_score_reduction: "max"  # subject-level anomaly score = max A_t over seeds/windows
+
+device: "auto"  # "auto" -> mps if available else cpu
+
+output_dir: "outputs/experiments/phase1"

@@ -1,0 +1,147 @@
+{
+  "config": {
+    "baseline": {
+      "project": {
+        "name": "GRAPH_ANOMALY",
+        "research_topic": "Few-Shot Temporal Subgraph Anomaly Detection in Functional Brain Networks",
+        "dataset": "ABIDE I"
+      },
+      "dataset": {
+        "raw_data_dir": "data/raw",
+        "ts_dir": "data/raw/Time_serie_per_site",
+        "phenotypic_file": "data/raw/abide/Phenotypic_V1_0b_preprocessed1.csv",
+        "processed_dir": "data/processed",
+        "fc_dir": "data/processed/fc",
+        "graphs_dir": "data/processed/graphs",
+        "metadata_dir": "data/processed/metadata",
+        "figures_dir": "outputs/figures"
+      },
+      "preprocessing": {
+        "roi_count": 360,
+        "connectivity_metric": "pearson",
+        "window_size": 30,
+        "stride": 10,
+        "remove_diagonal": true,
+        "clip_range": [
+          -1.0,
+          1.0
+        ]
+      },
+      "graph_construction": {
+        "threshold_mode": "absolute_magnitude",
+        "sparsity_ratio": 0.2,
+        "keep_signed_weights": true,
+        "symmetric": true,
+        "remove_self_loops": true
+      },
+      "splitting": {
+        "train_ratio": 0.7,
+        "val_ratio": 0.15,
+        "test_ratio": 0.15,
+        "stratify_by": "label",
+        "random_seed": 42
+      },
+      "subgraphs": {
+        "method": "k_hop",
+        "k": 1,
+        "seed_strategy": "all_rois",
+        "tracking_strategy": "stable",
+        "ref_window_idx": 0,
+        "num_total_rois": 360,
+        "storage_mode": "on_the_fly"
+      }
+    },
+    "phase1": {
+      "seeds": {
+        "num_seeds": 20,
+        "selection_seed": 42
+      },
+      "cache": {
+        "dir": "data/processed/subgraph_cache"
+      },
+      "gin": {
+        "in_channels": 1,
+        "hidden_channels": 64,
+        "embedding_dim": 128,
+        "num_layers": 2
+      },
+      "gru": {
+        "hidden_dim": 128,
+        "num_layers": 1
+      },
+      "training": {
+        "epochs": 5,
+        "lr": 0.001,
+        "weight_decay": 0.0,
+        "optimizer": "adam",
+        "batch_size": 16,
+        "lambda_var": 0.5,
+        "train_subject_pool": "train_control",
+        "random_seed": 42
+      },
+      "anomaly": {
+        "threshold_percentile": 95
+      },
+      "fewshot": {
+        "shots": [
+          1,
+          5,
+          10
+        ],
+        "num_support_seeds": 5,
+        "support_pool": "train_asd",
+        "random_seed": 42
+      },
+      "evaluation": {
+        "test_pool": "test_all",
+        "subject_score_reduction": "max"
+      },
+      "device": "auto",
+      "output_dir": "outputs/experiments/phase1"
+    }
+  },
+  "device": "mps",
+  "num_train_examples": 6560,
+  "num_val_examples": 1400,
+  "history": [
+    {
+      "epoch": 1,
+      "train_pred_loss": 0.1337006796060539,
+      "train_var_penalty": 0.3069324976832765,
+      "val_pred_loss": 0.15999404293085848,
+      "elapsed_seconds": 73.93176221847534
+    },
+    {
+      "epoch": 2,
+      "train_pred_loss": 0.1357388929077765,
+      "train_var_penalty": 0.08845308917438294,
+      "val_pred_loss": 0.13650867473866257,
+      "elapsed_seconds": 126.9695611000061
+    },
+    {
+      "epoch": 3,
+      "train_pred_loss": 0.12366606956574976,
+      "train_var_penalty": 0.07530162633487546,
+      "val_pred_loss": 0.1407277598910566,
+      "elapsed_seconds": 177.88598608970642
+    },
+    {
+      "epoch": 4,
+      "train_pred_loss": 0.1204223467809398,
+      "train_var_penalty": 0.07027269867930289,
+      "val_pred_loss": 0.113254111284124,
+      "elapsed_seconds": 238.2561740875244
+    },
+    {
+      "epoch": 5,
+      "train_pred_loss": 0.11621844165208862,
+      "train_var_penalty": 0.06820125651954696,
+      "val_pred_loss": 0.12064251334406435,
+      "elapsed_seconds": 298.89863324165344
+    }
+  ],
+  "best_val_pred_loss": 0.113254111284124,
+  "embedding_std_mean": 1.1591649055480957,
+  "embedding_std_min": 1.028205156326294,
+  "total_training_seconds": 299.7160110473633
+}
