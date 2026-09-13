@@ -1,0 +1,28 @@
+# Phase 2 Configuration: Structure-Aware Anomaly Generation
+# Builds on the Phase 1 checkpoint (outputs/experiments/phase1/checkpoints/best.pt).
+
+generator:
+  # Perturbation is expressed as edge-weight edits to a REAL next-window subgraph
+  # G_{t+1}[S_v] taken from a real, normal (train-control) subject -- never a
+  # freshly sampled random graph. Edits keep node set, edge set, and symmetry
+  # intact; only signed edge strengths change (see docs/phase2_report.md for the
+  # mathematical justification / why this was chosen over pure latent-space
+  # perturbation).
+  edge_perturb_max_frac: 0.15   # at severity=1.0, touch up to 15% of the subgraph's undirected edges
+  step_size_max: 0.6            # at severity=1.0, max |delta| applied to a touched edge weight
+  clip_range: [-1.0, 1.0]       # matches M1's FC representation range
+
+severities:
+  low: 0.25
+  medium: 0.55
+  high: 0.9
+
+dataset:
+  base_subject_pool: "train_control"   # generation grounds in real NORMAL subgraphs only
+  num_base_subjects: 60                # deterministic subsample of train_control
+  transitions_per_subject_seed: 1      # 1 random valid transition per (subject, seed)
+  methods: ["structure_aware", "random"]
+  random_seed: 42
+
+output_dir: "outputs/experiments/phase2"
+device: "auto"
