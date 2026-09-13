@@ -1,0 +1,27 @@
+# Phase 3 Configuration: Few-Shot Adaptation + Final Comparison
+#
+# Question: does structure-aware anomaly generation make the detector more reliable
+# when only a few real abnormal (ASD) examples are available?
+#
+# Detector for this comparison: Phase 1's GIN+GRU is kept FROZEN (it already encodes
+# normal structure/dynamics). The only thing that gets to use labeled examples is a
+# tiny logistic-regression head on top of the same subject-level anomaly-score
+# feature Phase 1 used (max A_t over seeds/windows) -- this is the simplest possible
+# adaptable classifier, deliberately not a second deep network, so that any
+# improvement is attributable to the TRAINING DATA (real vs real+generated), not to
+# extra model capacity.
+
+shots: [1, 5, 10]
+num_trials: 5             # independent support-set draws per shot count (mean +/- std reported)
+num_generated_per_trial: 30
+generation_severity: 0.9  # "high", matches Phase 2's severity naming
+negative_pool: "train_control"   # all train-control subjects are free (abundant) negatives
+random_seed: 42
+
+classifier:
+  type: logistic_regression
+  C: 1.0
+  class_weight: "balanced"
+
+output_dir: "outputs/experiments/phase3"
+device: "auto"
