@@ -5,6 +5,7 @@ __pycache__/
 venv/
 .env
 .ipynb_checkpoints/
+.DS_Store
 
 # Regeneratable in ~2 min from data/processed/graphs via:
 #   python -m src.data.build_phase1_cache

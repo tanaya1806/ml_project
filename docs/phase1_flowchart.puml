@@ -1,0 +1,230 @@
+@startuml
+' Phase 1 -- Normal Temporal Subgraph Modeling & Baseline Anomaly Detection
+' Logical source for docs/phase1_flowchart.docx. Every value here is verified
+' against src/, configs/phase1.yaml, and outputs/experiments/phase1/*.json --
+' see the "verified against source" note on each stage below. This is the
+' reproducibility companion to the .docx; keep the two in sync if the
+' implementation changes.
+
+title Phase 1 -- Normal Temporal Subgraph Modeling & Baseline Anomaly Detection
+
+start
+
+:ABIDE rs-fMRI Dataset;
+note right
+  871 subjects * 360 ROIs * 20 sites
+  ROI time-series + diagnosis (Control / ASD)
+  468 control / 403 ASD total
+end note
+
+:Subject-Level Train / Validation / Test Split;
+note right
+  Stratified by diagnosis, random_seed = 42, ratios 70/15/15
+  No subject overlap between splits (asserted in code)
+  train=609 (328c+281a)  val=131 (70c+61a)  test=131 (70c+61a)
+end note
+
+split
+  :Training Set (609);
+  :Train-Control Subjects (328);
+  note right: learn NORMAL dynamics
+  :Train-ASD Subjects (281);
+  note right
+    NOT used to train GIN+GRU.
+    Reserved for the Phase 1E few-shot
+    support pool (out of scope here).
+  end note
+split again
+  :Validation Set (131);
+  :Validation-Control Subjects (70);
+  note right: threshold calibration ONLY, never training
+split again
+  :Test Set (131);
+  :Held-Out Test Subjects (131);
+  note right: final evaluation ONLY, completely untouched until then
+end split
+
+partition "Section 2 -- Spatial Subgraph Preparation" {
+  :Temporal Brain Graphs (M1 output);
+  note right: one sparse, signed FC graph per 30-TR sliding window, 360 ROIs
+
+  :Select 20 reproducible ROI seeds;
+  note right
+    src/data/subgraph_cache.py::select_seed_rois
+    stratified sample of 360 ROIs, selection_seed = 42
+    WHY 20, not 360? M2 supports all 360 as candidate seeds --
+    this is a fixed, reproducible compute-budget subsample for
+    Phase 1 training, not a limit of M2's own capability.
+  end note
+
+  :Stable k-hop subgraph extraction;
+  note right: k = 1, reference window = window 0 (track_temporal_subgraph_stable)
+
+  :Induced subgraph (per seed, per window);
+  note right: ROI node set + signed Pearson-correlation edge weights
+
+  :Stable tracking across time;
+  note right
+    WHY stable tracking? Same ROI identity fixed at every window
+    (only edge presence/weight evolves) -- keeps a consistent
+    subgraph identity so the temporal model compares the SAME
+    neighborhood window-to-window.
+  end note
+
+  :Cache subgraphs;
+  note right
+    One .npz per subject, built ONCE (src/data/build_phase1_cache.py)
+    reused every training epoch -- never recomputed
+  end note
+}
+
+partition "Section 3 -- GIN Spatial Representation" {
+  :Input: weighted subgraph;
+  :Node features = constant 1.0;
+  note right: ROI identity kept only as metadata, NOT a numeric input
+  :Weighted GIN Layer 1\n(weighted neighbor aggregation -> MLP -> ReLU);
+  note right: (1+eps)*h_v + sum_u w_uv h_u ; eps is TRAINABLE
+  :Weighted GIN Layer 2\n(weighted neighbor aggregation -> MLP -> ReLU);
+  note right
+    ReLU is applied after BOTH layers, including the last --
+    a deliberate implementation choice, not the more common
+    "skip ReLU on the final GIN layer" convention.
+  end note
+  :Global mean pooling (-> 64-dim);
+  :Projection layer Linear(64 -> 128);
+  :z_t ∈ R^128;
+  note right: one embedding per (seed, window); GIN weights shared across all subjects/seeds/windows
+}
+
+partition "Section 4 -- Temporal Sequence Modeling" {
+  :Embeddings across time  z_1 -> z_2 -> ... -> z_T;
+  :GRU Temporal Model  h_t = GRU(z_t, h_(t-1));
+  note right: hidden_dim = 128, num_layers = 1
+  :Predicted next  z_hat_(t+1) = Linear(h_t);
+  note right: causal -- z_hat[:,t] predicts z_seq[:,t+1], never sees the future
+  :Actual next  z_(t+1)  (the real embedding);
+}
+
+partition "Section 5 -- Joint GIN + GRU Training" {
+  :Compare z_(t+1) and z_hat_(t+1);
+  :Prediction loss = MSE(z_hat_(t+1), z_(t+1));
+  :Embedding variance check:\nstd_d(z) across the training batch;
+  :Variance penalty = lambda_var * mean(relu(1 - std_d(z)));
+  note right
+    Penalizes any embedding dimension whose std collapses toward 0.
+    WHY? Prevents trivial representation collapse (GIN mapping every
+    subgraph to nearly the same vector).
+  end note
+  :Total loss  L = L_pred + lambda_var * L_var  (lambda_var = 0.5);
+  :Backpropagation;
+  :Update GIN + GRU jointly;
+  note right
+    Adam, lr = 0.001, batch = 16 (subject, seed) pairs, 5 epochs.
+    Training data = Train-Control subjects ONLY (328) x 20 seeds.
+    GIN is NOT pretrained separately -- optimized together with GRU
+    using this single next-embedding-prediction objective.
+  end note
+}
+
+partition "Section 7 -- Collapse Check" {
+  if (Embeddings collapsed?\n(embedding_std ~ 0 ?)) then (yes)
+    :Investigate / reject model;
+    note right: representation learned nothing useful
+  else (no)
+    :Proceed to anomaly scoring;
+    note right
+      Observed (val, post-training): embedding_std_mean = 1.159,
+      embedding_std_min = 1.028. No numeric pass/fail line is coded
+      anywhere -- this metric is reported for human interpretation only.
+    end note
+  endif
+}
+
+partition "Section 6 -- Anomaly Score" {
+  :Anomaly score  A_t = || z_(t+1) - z_hat_(t+1) ||_2;
+  note right: src/anomaly/scoring.py::transition_scores
+}
+
+partition "Threshold Calibration (validation controls only)" {
+  :Validation-Control Subjects (70, unseen by training);
+  :Compute transition scores per seed x window;
+  note right: ~21,760 pooled scores (20 seeds x ~14 windows x 70 subjects)
+  :tau_transition = P95(A_healthy) = 7.435;
+  note right
+    "Approximately 5% of transition scores in the healthy calibration
+    population lie above tau_transition" -- NOT "exactly 5% of every
+    individual subject's transitions."
+  end note
+
+  if (A_t > tau_transition?) then (yes)
+    :Unusual transition (localization only);
+  else (no)
+    :Within normal reference range;
+  endif
+
+  note right
+    WHY is tau_transition alone NOT enough for a subject-level decision?
+    Each subject has ~280 transitions (20 seeds x ~14 windows).
+    280 x ~5% expected exceedance rate ~ several exceedances EXPECTED
+    BY CHANCE even in a perfectly healthy subject. Flagging "ANY
+    transition above tau_transition" was tested and flagged 131/131
+    test subjects (AUROC ~ 0.45, no discrimination) -- a genuine
+    multiple-comparisons error found during development.
+    -> a SECOND, subject-level threshold is required.
+  end note
+
+  :Aggregate per subject  A_subject = max_t A_t;
+  :Healthy validation subject-level scores (70 values);
+  :tau_subject = P95(A_subject, healthy validation) = 19.813;
+  note right: establishes how large a subject's worst transition can normally be in healthy controls
+}
+
+partition "Section 8 -- Final Test-Time Detection" {
+  :Unseen Test Subject (131: 70 control + 61 ASD);
+  note right: never used for training or calibration
+  :Generate temporal embeddings (frozen GIN);
+  :Compute transition anomaly scores (frozen GRU);
+  :Aggregate to subject-level score  A_subject = max_t A_t;
+  if (A_subject > tau_subject?) then (yes)
+    :FLAG: Anomalous;
+  else (no)
+    :FLAG: Normal;
+  endif
+}
+
+partition "Section 9 -- Final Evaluation" {
+  :Compare predictions with diagnosis labels (Control / ASD);
+  note right: labels used for EVALUATION only -- anomaly is NOT equated with ASD
+  :Phase 1 Baseline Evaluation;
+  note right
+    Precision = 0.500   Recall = 0.033   F1 = 0.062
+    AUROC = 0.453   AUPRC = 0.467
+    TP=2 TN=68 FP=2 FN=59; 4/131 test subjects flagged anomalous
+    Near-chance AUROC is an OBSERVED baseline result, reported exactly
+    as measured -- not a target, and not evidence of clinical utility.
+  end note
+}
+
+partition "PHASE 1 OUTPUT" {
+  :PHASE 1 OUTPUT;
+  note right
+    1. Trained GIN + GRU normal-dynamics model
+    2. 128-D temporal embedding representation
+    3. Transition-level anomaly score A_t
+    4. Calibrated transition threshold tau_transition = 7.435
+    5. Calibrated subject-level threshold tau_subject = 19.813
+    6. Subject-level anomaly predictions
+    7. Baseline evaluation metrics (P/R/F1/AUROC/AUPRC)
+    8. Anomaly-score visualizations
+    9. Model-collapse validation (embedding std check)
+  end note
+}
+
+:Output passed to Phase 2: trained Phase 1 model;
+note right: dashed hand-off -- NOT a Phase 1 implementation step
+:Structure-Aware Anomaly Generation (Phase 2);
+note right: not implemented here; shown only as the next stage
+
+stop
+
+@enduml
