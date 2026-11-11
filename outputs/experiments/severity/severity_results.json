@@ -1,0 +1,38 @@
+{
+ "n_asd_with_css": 193,
+ "band_counts": {
+  "high": 83,
+  "moderate": 70,
+  "low": 40
+ },
+ "split_counts": {
+  "test": 37,
+  "train": 133,
+  "val": 23
+ },
+ "band_cutoffs": "low<=5, moderate 6-7, high>=8 (analyst-defined)",
+ "holdout": {
+  "n_train": 133,
+  "n_eval": 60,
+  "accuracy": 0.43333333333333335,
+  "macro_f1": 0.3954415954415955,
+  "majority_class": "high",
+  "majority_accuracy": 0.55,
+  "chance_uniform": 0.3333333333333333,
+  "css_spearman_pred_vs_true": [
+   0.13065734095512166,
+   0.31971131305074035
+  ]
+ },
+ "subject_score_vs_css_spearman_all_asd": [
+  0.04637656347960761,
+  0.5218844920130293
+ ],
+ "cv_5fold_x10": {
+  "accuracy_mean": 0.39067476383265853,
+  "accuracy_sd": 0.06588079616287017,
+  "macro_f1_mean": 0.37247262455168256,
+  "majority_accuracy_mean": 0.4299595141700405,
+  "perm_p_macro_f1": 0.07960199004975124
+ }
+}

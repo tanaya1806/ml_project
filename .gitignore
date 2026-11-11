@@ -15,3 +15,10 @@ data/processed/subgraph_cache/
 # (deterministic given subject_id/seed/t/severity/method/rng_seed; 80MB, too large
 # to commit for something reproducible in under two minutes)
 outputs/experiments/phase2/generated_anomalies.json
+
+records.db
+space_build/
+
+node_modules/
+# raw ROI time series of 20 real ABIDE subjects; regenerate with testing_data/make_samples.py
+testing_data/samples/

@@ -36,26 +36,22 @@ def cache_path_for(subject_id: str, cache_dir: str) -> str:
     return os.path.join(cache_dir, f"{subject_id}.npz")
 
 
-def build_subject_cache(
-    graph_npz_path: str,
+def build_cache_from_arrays(
+    subject_id: str,
+    site: str,
+    label: int,
+    edge_indices: np.ndarray,
+    edge_weights: np.ndarray,
     seed_rois: Sequence[int],
     k: int = 1,
     ref_window_idx: int = 0,
 ) -> Dict:
-    """Extracts stable temporal subgraphs for all seed_rois from one subject's parent graph."""
-    data = np.load(graph_npz_path)
-    subject_id = str(data["subject_id"])
-    site = str(data["site"])
-    label = int(data["label"])
-    num_windows = int(data["num_windows"])
-    edge_indices = data["edge_indices"]
-    edge_weights = data["edge_weights"]
-
+    """Extracts stable temporal subgraphs for all seed_rois from in-memory parent-graph arrays."""
     out = {
         "subject_id": subject_id,
         "site": site,
         "label": label,
-        "num_windows": num_windows,
+        "num_windows": int(len(edge_indices)),
         "seed_rois": np.asarray(seed_rois, dtype=np.int16),
     }
 
@@ -79,6 +75,20 @@ def build_subject_cache(
         out[f"edge_weight_{seed}"] = edge_weight_arr
 
     return out
+
+
+def build_subject_cache(
+    graph_npz_path: str,
+    seed_rois: Sequence[int],
+    k: int = 1,
+    ref_window_idx: int = 0,
+) -> Dict:
+    """Extracts stable temporal subgraphs for all seed_rois from one subject's parent graph file."""
+    data = np.load(graph_npz_path)
+    return build_cache_from_arrays(
+        str(data["subject_id"]), str(data["site"]), int(data["label"]),
+        data["edge_indices"], data["edge_weights"], seed_rois, k=k, ref_window_idx=ref_window_idx,
+    )
 
 
 def build_cache_for_subjects(
