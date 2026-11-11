@@ -1,0 +1,65 @@
+{
+  "severity_control": {
+    "per_group": {
+      "structure_aware/low": {
+        "mean": 4.020132253120343,
+        "std": 2.4544829779467405,
+        "n": 1200
+      },
+      "random/low": {
+        "mean": 2.913561810081204,
+        "std": 2.3537922919604672,
+        "n": 1200
+      },
+      "structure_aware/medium": {
+        "mean": 5.8222641958793,
+        "std": 2.6924774359429935,
+        "n": 1200
+      },
+      "random/medium": {
+        "mean": 2.883954979106784,
+        "std": 2.352556735227336,
+        "n": 1200
+      },
+      "structure_aware/high": {
+        "mean": 7.63228092695276,
+        "std": 3.1723310119026937,
+        "n": 1200
+      },
+      "random/high": {
+        "mean": 2.842159282490611,
+        "std": 2.3113883308713,
+        "n": 1200
+      }
+    },
+    "monotonic_in_severity": {
+      "structure_aware": true,
+      "random": false
+    }
+  },
+  "detectability": {
+    "structure_aware/low": 0.0775,
+    "random/low": 0.045,
+    "structure_aware/medium": 0.23,
+    "random/medium": 0.045,
+    "structure_aware/high": 0.4575,
+    "random/high": 0.0475,
+    "real_normal_val_control": 0.05,
+    "real_asd_test": 0.04939626783754116
+  },
+  "diversity": {
+    "structure_aware/low": 0.9997172323211292,
+    "random/low": 0.999685800781414,
+    "structure_aware/medium": 0.9995154649000705,
+    "random/medium": 0.9991999487029837,
+    "structure_aware/high": 0.9992916678611352,
+    "random/high": 0.9990043136624579
+  },
+  "validity": {
+    "num_records": 7200,
+    "num_constraint_violations": 0
+  },
+  "tau_transition": 7.4349614620208735,
+  "detection_ratio_high": 9.631578947368421,
+  "source_file": "outputs/experiments/phase2/generator_validation.json"
+}

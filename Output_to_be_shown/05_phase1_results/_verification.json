@@ -1,0 +1,29 @@
+{
+  "recomputed": {
+    "precision": 0.5,
+    "recall": 0.03278688524590164,
+    "auroc": 0.4526932084309133,
+    "auprc": 0.4669719215900707,
+    "num_flagged": 4
+  },
+  "reported_metrics_json": {
+    "tau_transition": 7.4349614620208735,
+    "tau_subject": 19.813226509094232,
+    "precision": 0.5,
+    "recall": 0.03278688524590164,
+    "f1": 0.06153846153846154,
+    "auroc": 0.4526932084309133,
+    "auprc": 0.4669719215900707,
+    "true_positives": 2,
+    "true_negatives": 68,
+    "false_positives": 2,
+    "false_negatives": 59,
+    "num_test_subjects": 131,
+    "num_subjects_flagged_anomalous": 4,
+    "num_anomalous_transitions_detected": 1890
+  },
+  "exact_match_auroc": true,
+  "exact_match_auprc": true,
+  "exact_match_confusion_matrix": true,
+  "num_test_subjects_scored": 131
+}

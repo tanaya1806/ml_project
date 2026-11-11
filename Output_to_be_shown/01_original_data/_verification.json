@@ -1,0 +1,12 @@
+{
+  "subject_id": "UM_1_007",
+  "site": "UM_1",
+  "label": 0,
+  "window": 0,
+  "window_start_TR": 0,
+  "window_end_TR": 30,
+  "num_undirected_edges_kept": 12924,
+  "abs_r_threshold": 0.47780025005340576,
+  "num_nodes": 360,
+  "source_file": "data/processed/graphs/UM_1_007.npz"
+}

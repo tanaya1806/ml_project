@@ -1,0 +1,22 @@
+{
+  "subject_id": "KKI_002",
+  "seed_roi": 1,
+  "t": 1,
+  "severity": 0.9,
+  "num_undirected_edges": 548,
+  "num_touch": 74,
+  "score_before": 4.439511775970459,
+  "score_after_structure_aware": 8.13394546508789,
+  "score_after_random": 2.8715407848358154,
+  "score_trajectory_structure_aware": [
+    4.439511775970459,
+    5.953764915466309,
+    6.770129203796387,
+    7.1586198806762695,
+    8.396076202392578,
+    8.13394546508789
+  ],
+  "matches_persisted_record": true,
+  "persisted_record_score_after_structure_aware": 8.133946418762207,
+  "persisted_record_score_after_random": 2.87153959274292
+}

@@ -1,0 +1,1712 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Normal to Anomaly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F4F5F9; --bg-elev:#FFFFFF; --ink:#12172B; --ink-dim:#5B6478; --line:#DDE1EC;
+    --accent:#2E5FD9; --accent-ink:#FFFFFF;
+    --good:#0E9488; --bad:#C43D3D;
+    --shadow: 0 1px 2px rgba(18,23,43,.06), 0 10px 30px rgba(18,23,43,.08);
+    --radius: 14px;
+    /* fixed cinema-screen palette — deliberate, theme-independent (like a video player's screen) */
+    --s-bg:#0A0E1C; --s-panel:#121A2E; --s-panel2:#182242; --s-ink:#EDF0FA; --s-ink-dim:#8E98B8;
+    --s-line:#2A3457; --s-control:#4FD3C4; --s-control-dim:#245c56; --s-asd:#F2A65A; --s-asd-dim:#6b4a24;
+    --s-anomaly:#C77DFF; --s-anomaly-dim:#4a2e63; --s-accent:#6FA8FF; --s-bad:#FF6B6B; --s-good:#4FD3C4;
+    --s-warn:#F2A65A;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0D1120; --bg-elev:#161B2E; --ink:#EAECF6; --ink-dim:#9AA3C0; --line:#2A3150;
+      --accent:#7FA6FF; --accent-ink:#0D1120; --good:#4FD3C4; --bad:#FF8080;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0D1120; --bg-elev:#161B2E; --ink:#EAECF6; --ink-dim:#9AA3C0; --line:#2A3150;
+    --accent:#7FA6FF; --accent-ink:#0D1120; --good:#4FD3C4; --bad:#FF8080;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',system-ui,sans-serif; }
+  .wrap{ max-width:1220px; margin:0 auto; padding:20px 16px 40px; }
+  .top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; padding-block:6px 14px; }
+  .brand{ font-family:'Fraunces',serif; font-weight:600; font-size:15px; letter-spacing:.02em; color:var(--ink-dim); }
+  .brand b{ color:var(--ink); }
+  h1.title{ font-family:'Fraunces',serif; font-weight:600; font-size:clamp(20px,3vw,28px); margin:2px 0 0; text-wrap:balance; }
+  .sub{ color:var(--ink-dim); font-size:13.5px; max-width:640px; }
+
+  .stageOuter{ position:relative; width:100%; border-radius: var(--radius); overflow:hidden; background:var(--s-bg); box-shadow:var(--shadow); }
+  .stageScaler{ position:absolute; top:0; left:0; width:1280px; height:720px; }
+  #svgLayer{ position:absolute; inset:0; width:1280px; height:720px; }
+  #htmlLayer{ position:absolute; inset:0; width:1280px; height:720px; font-family:'IBM Plex Sans',sans-serif; }
+
+  .actTag{ position:absolute; top:26px; left:34px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--s-accent); opacity:.85; }
+  .sceneTitle{ position:absolute; top:48px; left:34px; right:34px; font-family:'Fraunces',serif; font-weight:600; font-size:30px; color:var(--s-ink); text-wrap:balance; }
+
+  .startOverlay{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:radial-gradient(120% 100% at 50% 20%, #16224a 0%, #0A0E1C 70%); z-index:5; text-align:center; padding:0 40px;}
+  .startOverlay h2{ font-family:'Fraunces',serif; font-size:34px; color:var(--s-ink); margin:0; max-width:820px; text-wrap:balance; font-weight:600;}
+  .startOverlay p{ color:var(--s-ink-dim); font-size:15px; max-width:640px; margin:0; line-height:1.6; }
+  .startBtn{ margin-top:10px; background:var(--s-accent); color:#0A0E1C; border:none; font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:15px; padding:13px 26px; border-radius:999px; cursor:pointer; }
+  .startBtn:hover{ filter:brightness(1.08); }
+  .startNote{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--s-ink-dim); opacity:.8; }
+
+  .capbar{ margin-top:14px; min-height:74px; background:var(--bg-elev); border:1px solid var(--line); border-radius:12px; padding:14px 18px; display:flex; align-items:center; }
+  .capbar p{ margin:0; font-size:15.5px; line-height:1.55; color:var(--ink); }
+  .capbar .empty{ color:var(--ink-dim); font-style:italic; }
+
+  .controls{ margin-top:12px; display:flex; align-items:center; gap:12px; }
+  .ctrlBtn{ background:var(--bg-elev); border:1px solid var(--line); color:var(--ink); width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto; }
+  .ctrlBtn:hover{ border-color:var(--accent); color:var(--accent); }
+  .ctrlBtn svg{ width:16px; height:16px; fill:currentColor; }
+  .scrubTrack{ position:relative; flex:1; height:8px; background:var(--line); border-radius:5px; cursor:pointer; }
+  .scrubFill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--accent); border-radius:5px; }
+  .scrubTicks{ position:absolute; inset:0; display:flex; }
+  .scrubTicks i{ flex:1; border-right:1px solid var(--bg); }
+  .timeLbl{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-dim); white-space:nowrap; min-width:64px; text-align:right;}
+  .chapBtn{ display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; }
+
+  .layout{ display:grid; grid-template-columns: 1fr; gap:0; margin-top:16px; }
+  .withSidebar{ display:grid; grid-template-columns: 260px 1fr; gap:18px; align-items:start; }
+  #sidebar{ background:var(--bg-elev); border:1px solid var(--line); border-radius:12px; padding:10px; max-height:640px; overflow:auto; }
+  #sidebar .actGroup{ margin-bottom:8px; }
+  #sidebar .actName{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-dim); padding:8px 8px 4px; }
+  #sidebar button{ display:block; width:100%; text-align:left; background:none; border:none; color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:13px; padding:7px 8px; border-radius:7px; cursor:pointer; line-height:1.3; }
+  #sidebar button:hover{ background:var(--bg); }
+  #sidebar button.active{ background:var(--accent); color:var(--accent-ink); }
+  #sidebar button .n{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; opacity:.7; margin-right:6px; }
+  @media (max-width: 860px){ .withSidebar{ grid-template-columns:1fr; } #sidebar{ max-height:220px; } }
+
+  .foot{ margin-top:26px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .foot b{ color:var(--ink); }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition-duration:.001ms !important; animation-duration:.001ms !important; } }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="brand"><b>GRAPH_ANOMALY</b> — Visual Technical Explainer</div>
+      <h1 class="title">Few-Shot Temporal Anomaly Generation &amp; Detection in Brain Connectivity Subgraphs for Autism Disorder</h1>
+      <p class="sub">A scene-by-scene, narrated walkthrough of the entire pipeline — raw fMRI in, a trained detector and generator out. Every number is real, pulled from the project's own results files.</p>
+    </div>
+  </div>
+
+  <div class="stageOuter" id="stageOuter">
+    <div class="stageScaler" id="scaler">
+      <svg id="svgLayer" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="htmlLayer"></div>
+      <div class="actTag" id="actTag" style="display:none"></div>
+      <div class="sceneTitle" id="sceneTitleEl" style="display:none"></div>
+      <div class="startOverlay" id="startOverlay">
+        <h2>Watch the algorithm think.</h2>
+        <p>A 30&ndash;40 minute narrated visual walkthrough of GRAPH_ANOMALY &mdash; from a raw resting-state fMRI scan, through graph construction, a trained GIN+GRU model, gradient-guided anomaly generation, to the final few-shot evaluation. Every transformation is drawn on screen as it happens.</p>
+        <button class="startBtn" id="startBtn">▶  Start the walkthrough</button>
+        <span class="startNote">Uses your browser's built-in narration. Captions are always on — turn your sound on to hear it.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="capbar" id="capbar"><p class="empty">Captions will appear here as each scene plays.</p></div>
+
+  <div class="controls">
+    <button class="ctrlBtn" id="prevBtn" title="Previous scene"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+    <button class="ctrlBtn" id="playBtn" title="Play/Pause"><svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <button class="ctrlBtn" id="nextBtn" title="Next scene"><svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg></button>
+    <div class="scrubTrack" id="scrubTrack"><div class="scrubTicks" id="scrubTicks"></div><div class="scrubFill" id="scrubFill"></div></div>
+    <div class="timeLbl" id="sceneCounter">0 / 0</div>
+    <button class="ctrlBtn" id="muteBtn" title="Mute narration (captions stay on)"><svg id="muteIcon" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"/></svg></button>
+  </div>
+
+  <div class="withSidebar">
+    <aside id="sidebar"></aside>
+    <div></div>
+  </div>
+
+  <div class="foot">
+    <div>Source of truth: <b>GRAPH_ANOMALY_End_to_End_Explainer.pdf</b> and the project's committed <code>outputs/experiments/phase{1,2,3}/*.json</code> results.</div>
+    <div>Synthetic anomalies are a methodological tool — <b>not</b> clinically validated ASD biomarkers.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const NS = "http://www.w3.org/2000/svg";
+const svgLayer = document.getElementById("svgLayer");
+const htmlLayer = document.getElementById("htmlLayer");
+const actTagEl = document.getElementById("actTag");
+const sceneTitleEl = document.getElementById("sceneTitleEl");
+const capbar = document.getElementById("capbar");
+const scaler = document.getElementById("scaler");
+const stageOuter = document.getElementById("stageOuter");
+
+function fit(){
+  const w = stageOuter.clientWidth;
+  const s = w/1280;
+  scaler.style.transform = "scale(" + s + ")";
+  stageOuter.style.height = (720*s) + "px";
+}
+window.addEventListener("resize", fit);
+
+function E(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function H(tag, attrs, parent){
+  const e = document.createElement(tag);
+  for(const k in attrs){
+    if(k==="style") e.style.cssText = attrs[k];
+    else if(k==="text") e.textContent = attrs[k];
+    else if(k==="html") e.innerHTML = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  if(parent) parent.appendChild(e);
+  return e;
+}
+function seeded(seed){ let s = seed % 2147483647; if(s<=0) s+=2147483646; return function(){ s = s*16807 % 2147483647; return (s-1)/2147483646; }; }
+
+let currentToken = 0;
+const pending = []; // {id, fn}
+function after(ms, token, fn){
+  const id = setTimeout(function(){ if(token===currentToken) fn(); }, ms);
+  return id;
+}
+function stagger(items, perDelay, startDelay, token, fn){
+  items.forEach(function(it, i){ after(startDelay + i*perDelay, token, function(){ fn(it, i); }); });
+}
+
+/* ---------------- reusable components ---------------- */
+
+function card(parent, x, y, w, h, opts){
+  opts = opts || {};
+  const r = E("rect", {x:x, y:y, width:w, height:h, rx:opts.rx!=null?opts.rx:10,
+    style:"fill:"+(opts.fill||"var(--s-panel)")+";stroke:"+(opts.stroke||"var(--s-line)")+";stroke-width:"+(opts.sw||1.25)}, parent);
+  return r;
+}
+function label(parent, x, y, text, opts){
+  opts = opts || {};
+  const t = E("text", {x:x, y:y, "text-anchor":opts.anchor||"start",
+    style:"font-family:'IBM Plex Sans',sans-serif;font-size:"+(opts.size||13)+"px;font-weight:"+(opts.weight||500)+
+      ";fill:"+(opts.color||"var(--s-ink)")}, parent);
+  t.textContent = text;
+  return t;
+}
+function mono(parent, x, y, text, opts){
+  opts = opts || {};
+  const t = E("text", {x:x, y:y, "text-anchor":opts.anchor||"start",
+    style:"font-family:'IBM Plex Mono',monospace;font-size:"+(opts.size||12)+"px;font-weight:"+(opts.weight||500)+
+      ";fill:"+(opts.color||"var(--s-ink)")}, parent);
+  t.textContent = text;
+  return t;
+}
+function fade(el, delay){ el.style.opacity=0; el.style.transition="opacity .55s ease, transform .55s ease"; requestAnimationFrame(function(){ setTimeout(function(){ el.style.opacity=1; }, delay||0); }); return el; }
+function fadeUp(el, delay){ el.style.opacity=0; el.style.transform="translateY(10px)"; el.style.transition="opacity .5s ease, transform .5s ease";
+  requestAnimationFrame(function(){ setTimeout(function(){ el.style.opacity=1; el.style.transform="translateY(0)"; }, delay||0); }); return el; }
+
+function arrow(parent, x1,y1,x2,y2,opts){
+  opts = opts||{};
+  const color = opts.color || "var(--s-line)";
+  const l = E("line",{x1:x1,y1:y1,x2:x2,y2:y2, style:"stroke:"+color+";stroke-width:"+(opts.sw||2)+";"+(opts.dash?"stroke-dasharray:5,4;":"")}, parent);
+  if(!opts.noHead){
+    const ang = Math.atan2(y2-y1,x2-x1);
+    const s=6;
+    const p1x=x2-s*Math.cos(ang-0.4), p1y=y2-s*Math.sin(ang-0.4);
+    const p2x=x2-s*Math.cos(ang+0.4), p2y=y2-s*Math.sin(ang+0.4);
+    E("polygon",{points:x2+","+y2+" "+p1x+","+p1y+" "+p2x+","+p2y, style:"fill:"+color}, parent);
+  }
+  return l;
+}
+
+// pipeline flow: vertical or horizontal boxes with arrows, revealed in sequence
+function pipelineFlow(parent, steps, opts, token){
+  opts = opts || {};
+  const dir = opts.dir || "v"; // v or h
+  const x0 = opts.x!=null?opts.x:520, y0 = opts.y!=null?opts.y:70;
+  const w = opts.w || 360, h = opts.h || 54, gap = opts.gap || 26;
+  const delay = opts.delay!=null?opts.delay:550;
+  steps.forEach(function(step, i){
+    let x,y;
+    if(dir==="v"){ x=x0; y=y0+i*(h+gap); } else { x=x0+i*(w+gap); y=y0; }
+    const g = E("g",{opacity:0}, parent);
+    const isEnd = step.highlight;
+    card(g, x, y, w, h, {fill: isEnd? "var(--s-panel2)":"var(--s-panel)", stroke: isEnd?"var(--s-accent)":"var(--s-line)", sw: isEnd?1.75:1.25});
+    label(g, x+w/2, y+h/2+ (step.sub? -4:5), step.t, {anchor:"middle", size:15, weight:600, color: isEnd?"var(--s-accent)":"var(--s-ink)"});
+    if(step.sub) mono(g, x+w/2, y+h/2+16, step.sub, {anchor:"middle", size:10.5, color:"var(--s-ink-dim)"});
+    after(delay*i, token, function(){ g.style.transition="opacity .5s ease"; g.style.opacity=1; });
+    if(i>0){
+      const ag = E("g",{opacity:0}, parent);
+      if(dir==="v") arrow(ag, x+w/2, y-gap+6, x+w/2, y-6);
+      else arrow(ag, x-gap+6, y+h/2, x-6, y+h/2);
+      after(delay*i-160, token, function(){ ag.style.transition="opacity .35s ease"; ag.style.opacity=1; });
+    }
+  });
+  const total = (dir==="v"? y0+steps.length*(h+gap) : x0+steps.length*(w+gap));
+  return total;
+}
+
+// node-link graph
+function graphView(parent, cx, cy, R, nodes, edges, opts){
+  opts = opts||{};
+  const pos = {};
+  nodes.forEach(function(n,i){
+    const ang = (opts.angleOffset||0) + i*(2*Math.PI/nodes.length);
+    pos[n.id] = n.pos || {x:cx+R*Math.cos(ang), y:cy+R*Math.sin(ang)};
+  });
+  const eg = E("g",{}, parent);
+  const edgeEls = edges.map(function(e){
+    const a=pos[e.a], b=pos[e.b];
+    const w = Math.abs(e.w!=null?e.w:0.5);
+    const color = e.color || ((e.w!=null && e.w<0) ? "var(--s-asd)" : "var(--s-control)");
+    const line = E("line",{x1:a.x,y1:a.y,x2:a.x,y2:a.y, style:"stroke:"+color+";stroke-width:"+(0.8+w*3.4)+";stroke-linecap:round;opacity:"+(opts.edgeOpacity!=null?opts.edgeOpacity:0.85)}, eg);
+    line.dataset.x2=b.x; line.dataset.y2=b.y;
+    return {line:line, a:a, b:b, e:e};
+  });
+  const ng = E("g",{}, parent);
+  const nodeEls = {};
+  nodes.forEach(function(n){
+    const p = pos[n.id];
+    const g = E("g",{transform:"translate("+p.x+","+p.y+") scale(0)"}, ng);
+    E("circle",{r:n.r||15, style:"fill:"+(n.fill||"var(--s-panel2)")+";stroke:"+(n.stroke||"var(--s-accent)")+";stroke-width:2"}, g);
+    if(n.label) label(g, 0, 5, n.label, {anchor:"middle", size:12.5, weight:700, color:n.labelColor||"var(--s-ink)"});
+    nodeEls[n.id]=g;
+  });
+  return {
+    pos: pos, edgeEls: edgeEls, nodeEls: nodeEls,
+    revealNodes: function(token, perDelay, startDelay){
+      Object.keys(nodeEls).forEach(function(id,i){
+        after((startDelay||0)+i*(perDelay||60), token, function(){
+          const g = nodeEls[id]; g.style.transition="transform .4s cubic-bezier(.2,1.4,.4,1)"; g.setAttribute("transform", g.getAttribute("transform").replace("scale(0)","scale(1)"));
+        });
+      });
+    },
+    revealEdges: function(token, perDelay, startDelay){
+      edgeEls.forEach(function(o,i){
+        after((startDelay||0)+i*(perDelay||40), token, function(){
+          o.line.style.transition="all .35s ease";
+          o.line.setAttribute("x2", o.line.dataset.x2); o.line.setAttribute("y2", o.line.dataset.y2);
+        });
+      });
+    }
+  };
+}
+
+// small sparkline signal
+function sparkline(parent, x, y, w, h, seedNum, opts){
+  opts = opts||{};
+  const rnd = seeded(seedNum);
+  const n = opts.n || 40;
+  let d = "";
+  let v = 0;
+  const pts = [];
+  for(let i=0;i<n;i++){
+    v = v*0.72 + (rnd()-0.5)*1.5;
+    pts.push(v);
+  }
+  const maxv = Math.max.apply(null, pts.map(Math.abs))||1;
+  pts.forEach(function(p,i){
+    const px = x + (i/(n-1))*w;
+    const py = y + h/2 - (p/maxv)*(h/2)*0.92;
+    d += (i===0?"M":"L") + px.toFixed(1) + "," + py.toFixed(1) + " ";
+  });
+  const path = E("path",{d:d, style:"fill:none;stroke:"+(opts.color||"var(--s-accent)")+";stroke-width:"+(opts.sw||1.6)+";stroke-linejoin:round"}, parent);
+  const len = 800;
+  path.style.strokeDasharray = len;
+  path.style.strokeDashoffset = len;
+  return {path:path, points:pts, reveal:function(token, delay, dur){ after(delay||0, token, function(){ path.style.transition="stroke-dashoffset "+(dur||900)+"ms ease"; path.style.strokeDashoffset=0; }); }};
+}
+
+// vector box: row of colored cells
+function vectorBox(parent, x, y, dims, cellW, cellH, seedNum, opts){
+  opts = opts||{};
+  const rnd = seeded(seedNum);
+  const cells = [];
+  for(let i=0;i<dims;i++){
+    const v = (rnd()*2-1);
+    const g = E("rect",{x:x+i*cellW, y:y, width:cellW-1.2, height:cellH, rx:2, style:"fill:"+colorForVal(v)+";opacity:0"}, parent);
+    cells.push({g:g, v:v});
+  }
+  function colorForVal(v){
+    const t = (v+1)/2;
+    const c1=[79,211,196], c2=[199,125,255];
+    const r = Math.round(c1[0]+(c2[0]-c1[0])*t), gg=Math.round(c1[1]+(c2[1]-c1[1])*t), b=Math.round(c1[2]+(c2[2]-c1[2])*t);
+    return "rgb("+r+","+gg+","+b+")";
+  }
+  return {
+    cells:cells, width: dims*cellW,
+    reveal: function(token, delay, perCell){
+      cells.forEach(function(c,i){ after((delay||0)+i*(perCell||6), token, function(){ c.g.style.transition="opacity .3s ease"; c.g.style.opacity=1; }); });
+    }
+  };
+}
+
+function barChart(parent, x, y, w, h, data, opts){
+  opts = opts||{};
+  const maxV = opts.max!=null? opts.max : Math.max.apply(null, data.map(function(d){return d.v;}))*1.15;
+  const bw = w/data.length*0.56;
+  const gap = w/data.length;
+  E("line",{x1:x,y1:y+h,x2:x+w,y2:y+h, style:"stroke:var(--s-line);stroke-width:1"}, parent);
+  if(opts.refLine!=null){
+    const ry = y + h - (opts.refLine/maxV)*h;
+    E("line",{x1:x,y1:ry,x2:x+w,y2:ry, style:"stroke:var(--s-ink-dim);stroke-width:1.25;stroke-dasharray:5,4"}, parent);
+    mono(parent, x+w+8, ry+4, opts.refLabel||"", {size:10.5, color:"var(--s-ink-dim)"});
+  }
+  const bars=[];
+  data.forEach(function(d,i){
+    const bh = (d.v/maxV)*h;
+    const bx = x + i*gap + (gap-bw)/2;
+    const rect = E("rect",{x:bx, y:y+h, width:bw, height:0, rx:4, style:"fill:"+(d.color||"var(--s-accent)")}, parent);
+    label(parent, bx+bw/2, y+h+20, d.label, {anchor:"middle", size:11.5, color:"var(--s-ink-dim)"});
+    const vt = mono(parent, bx+bw/2, y+h-bh-10, "", {anchor:"middle", size:12.5, weight:600, color:"var(--s-ink)"});
+    bars.push({rect:rect, bh:bh, bx:bx, bw:bw, y:y, h:h, vt:vt, v:d.v});
+  });
+  return {
+    reveal: function(token, delay, perBar){
+      bars.forEach(function(b,i){
+        after((delay||0)+i*(perBar||140), token, function(){
+          b.rect.style.transition="height .55s cubic-bezier(.2,.9,.3,1), y .55s cubic-bezier(.2,.9,.3,1)";
+          b.rect.setAttribute("height", b.bh); b.rect.setAttribute("y", b.y+b.h-b.bh);
+          b.vt.style.transition="opacity .4s ease"; b.vt.textContent = (b.v).toFixed(3).replace(/0$/,'').replace(/\.$/,'');
+          b.vt.textContent = b.v.toFixed(b.v<1?3:1);
+        });
+      });
+    }
+  };
+}
+
+function checklist(parent, x, y, items, opts){
+  opts=opts||{};
+  const rows=[];
+  items.forEach(function(it,i){
+    const ry = y+i*36;
+    const g = E("g",{opacity:0}, parent);
+    const circ = E("circle",{cx:x+10, cy:ry, r:10, style:"fill:none;stroke:var(--s-line);stroke-width:1.5"}, g);
+    const mark = E("text",{x:x+10,y:ry+4,"text-anchor":"middle", style:"font-family:'IBM Plex Sans';font-size:12px;font-weight:700;fill:var(--s-good)"}, g);
+    label(g, x+30, ry+5, it, {size:14});
+    rows.push({g:g, circ:circ, mark:mark});
+  });
+  return {
+    reveal: function(token, delay, perItem, fail){
+      rows.forEach(function(r,i){
+        after((delay||0)+i*(perItem||420), token, function(){
+          r.g.style.transition="opacity .3s ease"; r.g.style.opacity=1;
+          const isFail = fail===i;
+          r.circ.style.stroke = isFail? "var(--s-bad)":"var(--s-good)";
+          r.mark.style.fill = isFail? "var(--s-bad)":"var(--s-good)";
+          r.mark.textContent = isFail? "✕":"✓";
+        });
+      });
+    }
+  };
+}
+
+function populationGrid(parent, x, y, w, h, total, opts){
+  opts=opts||{};
+  const cols = opts.cols || Math.ceil(Math.sqrt(total*w/h));
+  const rows = Math.ceil(total/cols);
+  const cw = w/cols, ch = h/rows;
+  const r = Math.min(cw,ch)*0.30;
+  const dots=[];
+  for(let i=0;i<total;i++){
+    const cx = x + (i%cols)*cw + cw/2, cy = y + Math.floor(i/cols)*ch + ch/2;
+    const c = E("circle",{cx:cx,cy:cy,r:r, style:"fill:var(--s-line);opacity:0"}, parent);
+    dots.push(c);
+  }
+  return { dots: dots,
+    reveal: function(token, delay, perDot){ dots.forEach(function(d,i){ after((delay||0)+i*(perDot||0.9), token, function(){ d.style.transition="opacity .25s ease"; d.style.opacity=1; }); }); },
+    colorGroup: function(token, delay, indices, color){ after(delay||0, token, function(){ indices.forEach(function(i){ if(dots[i]){ dots[i].style.transition="fill .5s ease"; dots[i].style.fill=color; } }); }); }
+  };
+}
+
+function brainOutline(parent, cx, cy, s, opts){
+  opts=opts||{};
+  // stylized brain silhouette via smooth cubic path (generated, not decorative filler)
+  const p = "M "+(cx-1.02*s)+","+(cy-0.05*s)+" "+
+    "C "+(cx-1.05*s)+","+(cy-0.55*s)+" "+(cx-0.55*s)+","+(cy-0.92*s)+" "+(cx-0.05*s)+","+(cy-0.88*s)+" "+
+    "C "+(cx+0.15*s)+","+(cy-1.0*s)+" "+(cx+0.62*s)+","+(cy-0.95*s)+" "+(cx+0.78*s)+","+(cy-0.6*s)+" "+
+    "C "+(cx+1.05*s)+","+(cy-0.5*s)+" "+(cx+1.06*s)+","+(cy-0.05*s)+" "+(cx+0.85*s)+","+(cy+0.12*s)+" "+
+    "C "+(cx+1.0*s)+","+(cy+0.35*s)+" "+(cx+0.85*s)+","+(cy+0.7*s)+" "+(cx+0.55*s)+","+(cy+0.78*s)+" "+
+    "C "+(cx+0.42*s)+","+(cy+1.0*s)+" "+(cx+0.05*s)+","+(cy+1.02*s)+" "+(cx-0.18*s)+","+(cy+0.86*s)+" "+
+    "C "+(cx-0.5*s)+","+(cy+0.98*s)+" "+(cx-0.92*s)+","+(cy+0.72*s)+" "+(cx-0.9*s)+","+(cy+0.38*s)+" "+
+    "C "+(cx-1.12*s)+","+(cy+0.25*s)+" "+(cx-1.1*s)+","+(cy+0.1*s)+" "+(cx-1.02*s)+","+(cy-0.05*s)+" Z";
+  const path = E("path",{d:p, style:"fill:"+(opts.fill||"none")+";stroke:"+(opts.stroke||"var(--s-line)")+";stroke-width:"+(opts.sw||1.75)}, parent);
+  E("path",{d:"M "+cx+","+(cy-0.85*s)+" C "+(cx-0.05*s)+","+(cy-0.3*s)+" "+(cx+0.05*s)+","+(cy+0.2*s)+" "+cx+","+(cy+0.95*s), style:"fill:none;stroke:"+(opts.stroke||"var(--s-line)")+";stroke-width:1;opacity:.5"}, parent);
+  return path;
+}
+
+/* ---------------- narration + captions ---------------- */
+let voices = [];
+function loadVoices(){ voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
+function pickVoice(){
+  const pref = voices.find(function(v){ return /en-(US|GB)/.test(v.lang) && /Google|Microsoft|Samantha|Daniel|Alex/i.test(v.name); });
+  return pref || voices.find(function(v){ return /^en/.test(v.lang); }) || voices[0];
+}
+
+/* ---------------- scenes ---------------- */
+const S = []; // scene definitions: {act, title, narr, build}
+
+function scene(act, title, narr, build){ S.push({act:act, title:title, narr:narr, build:build}); }
+
+/* ACT 0 — INTRODUCTION */
+scene("Introduction","The Research Question",
+"This is GRAPH_ANOMALY. The project asks a very specific question. Not simply: can we classify this subject as autistic or control. Instead: can we learn how brain connectivity subgraphs normally evolve over time, notice when they deviate from that learned normal, and deliberately generate meaningful deviations that can help when only a few real abnormal examples exist.",
+function(svg, html, token){
+  brainOutline(svg, 300, 340, 150, {stroke:"var(--s-accent)", sw:2});
+  const rnd = seeded(7);
+  for(let i=0;i<26;i++){
+    const a = rnd()*Math.PI*2, rr = 60+rnd()*90;
+    const x = 300+Math.cos(a)*rr, y=340+Math.sin(a)*rr*0.85;
+    const c = E("circle",{cx:x,cy:y,r:3.2, style:"fill:var(--s-control);opacity:0"}, svg);
+    after(300+i*40, token, function(){ c.style.transition="opacity .4s"; c.style.opacity=.9; });
+  }
+  const steps1 = [{t:"NORMAL DYNAMICS", sub:"learn what usually happens"}];
+  const steps2 = [{t:"ANOMALOUS DYNAMICS", sub:"identify or create meaningful deviation"}];
+  const g1 = E("g",{opacity:0}, svg); card(g1,700,210,500,160,{fill:"var(--s-panel)",stroke:"var(--s-control)"});
+  label(g1,950,280,"NORMAL DYNAMICS",{anchor:"middle",size:20,weight:700,color:"var(--s-control)"});
+  label(g1,950,312,"learn what usually happens",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+  sparkline(g1,730,330,440,26,42,{color:"var(--s-control)"}).reveal(token,900,900);
+  after(700,token,function(){ g1.style.transition="opacity .5s"; g1.style.opacity=1; });
+
+  const g2 = E("g",{opacity:0}, svg); card(g2,700,420,500,160,{fill:"var(--s-panel)",stroke:"var(--s-anomaly)"});
+  label(g2,950,490,"ANOMALOUS DYNAMICS",{anchor:"middle",size:20,weight:700,color:"var(--s-anomaly)"});
+  label(g2,950,522,"a deviation worth noticing — or deliberately creating",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+  const spark2 = sparkline(g2,730,540,440,26,99,{color:"var(--s-anomaly)", n:40});
+  spark2.reveal(token,1600,900);
+  after(1600,token,function(){ g2.style.transition="opacity .5s"; g2.style.opacity=1; });
+});
+
+scene("Introduction","Why Not a Direct Classifier?",
+"ABIDE gives us one diagnosis label per subject — not a label on any specific brain event. A classifier trained on that would learn whatever incidentally correlates with site or age, not a real mechanism. So this project reframes the problem: train only on healthy dynamics, then measure deviation from what was learned. That deviation is mechanistically interpretable — it says exactly which subgraph, at which moment, stopped looking normal.",
+function(svg, html, token){
+  const bad = E("g",{opacity:0}, svg);
+  card(bad,120,170,460,180,{stroke:"var(--s-bad)"});
+  label(bad,350,215,"SUBJECT → LABEL",{anchor:"middle",size:18,weight:700});
+  mono(bad,350,250,'"ASD" or "control"',{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+  label(bad,350,300,"learns site / age / scanner quirks,",{anchor:"middle",size:12.5,color:"var(--s-bad)"});
+  label(bad,350,320,"not a specific abnormal mechanism",{anchor:"middle",size:12.5,color:"var(--s-bad)"});
+  after(300,token,function(){ bad.style.transition="opacity .5s"; bad.style.opacity=1; });
+
+  const good = E("g",{opacity:0}, svg);
+  card(good,700,170,460,180,{stroke:"var(--s-control)"});
+  label(good,930,215,"LEARN NORMAL DYNAMICS",{anchor:"middle",size:18,weight:700,color:"var(--s-control)"});
+  mono(good,930,250,"then measure deviation",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+  label(good,930,300,"tells you exactly which subgraph,",{anchor:"middle",size:12.5,color:"var(--s-control)"});
+  label(good,930,320,"at which moment, looked unusual",{anchor:"middle",size:12.5,color:"var(--s-control)"});
+  after(1100,token,function(){ good.style.transition="opacity .5s"; good.style.opacity=1; });
+
+  after(1900, token, function(){
+    const g3 = E("g",{opacity:0}, svg);
+    label(g3,700,470,"this project's approach →",{anchor:"middle",size:14,color:"var(--s-ink-dim)"});
+    g3.style.transition="opacity .5s"; g3.style.opacity=1;
+    after(300,token,function(){
+      const arr = E("g",{opacity:0},svg);
+      arrow(arr, 930, 500, 930, 560, {color:"var(--s-control)", sw:2.5});
+      arr.style.transition="opacity .4s"; arr.style.opacity=1;
+    });
+  });
+});
+
+/* ACT 1 — DATA */
+scene("The Data","ABIDE I: 871 Subjects, 20 Sites",
+"The project uses ABIDE the First — the Autism Brain Imaging Data Exchange. Eight hundred seventy-one subjects, pooled from twenty different acquisition sites around the world, each contributing a resting-state functional MRI scan. Four hundred three of them carry an autism spectrum disorder diagnosis. Four hundred sixty-eight are typical controls. Watch them appear.",
+function(svg, html, token){
+  const pg = populationGrid(svg, 60, 90, 1160, 300, 871, {cols:38});
+  pg.reveal(token, 40, 1.05);
+  after(2400, token, function(){
+    const idxAsd = []; for(let i=0;i<403;i++) idxAsd.push(i);
+    const idxCtl = []; for(let i=403;i<871;i++) idxCtl.push(i);
+    pg.colorGroup(token,0,idxAsd,"var(--s-asd)");
+    pg.colorGroup(token,0,idxCtl,"var(--s-control)");
+  });
+  const legend = E("g",{opacity:0}, svg);
+  E("circle",{cx:200,cy:470,r:8,style:"fill:var(--s-asd)"},legend); label(legend,220,475,"403 ASD",{size:16,weight:600});
+  E("circle",{cx:400,cy:470,r:8,style:"fill:var(--s-control)"},legend); label(legend,420,475,"468 Typical Control",{size:16,weight:600});
+  after(2700,token,function(){ legend.style.transition="opacity .5s"; legend.style.opacity=1; });
+
+  const sites = E("g",{opacity:0}, svg);
+  label(sites,640,540,"pooled from 20 acquisition sites — different scanners, protocols, populations",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+  const rnd = seeded(3);
+  for(let i=0;i<20;i++){
+    const x = 100+i*54;
+    E("rect",{x:x,y:562,width:34,height:18,rx:4, style:"fill:var(--s-panel2);stroke:var(--s-line)"},sites);
+  }
+  after(3300,token,function(){ sites.style.transition="opacity .5s"; sites.style.opacity=1; });
+});
+
+scene("The Data","One Subject, 360 Regions",
+"Zoom into one subject. Before anything else happens, that subject's brain has already been divided — by the dataset's own preprocessing — into 360 regions of interest, called ROIs, each covering a distinct patch of cortex. Every ROI produces its own signal over the course of the scan. The input, at this point, is not yet a graph. It is three hundred sixty separate time series.",
+function(svg, html, token){
+  brainOutline(svg, 340, 330, 190, {stroke:"var(--s-accent)", sw:2});
+  const rnd = seeded(11);
+  const dots=[];
+  for(let i=0;i<170;i++){
+    const a = rnd()*Math.PI*2, rr=Math.pow(rnd(),0.55)*175;
+    const x = 340+Math.cos(a)*rr, y = 330+Math.sin(a)*rr*0.82;
+    const c = E("circle",{cx:x,cy:y,r:2.6,style:"fill:var(--s-control);opacity:0"}, svg);
+    dots.push(c);
+  }
+  stagger(dots, 6, 200, token, function(c){ c.style.transition="opacity .3s"; c.style.opacity=.95; });
+  after(1600, token, function(){
+    const t = E("g",{opacity:0},svg);
+    card(t,780,150,440,90,{stroke:"var(--s-accent)"});
+    label(t,1000,190,"360 REGIONS OF INTEREST",{anchor:"middle",size:20,weight:700,color:"var(--s-accent)"});
+    label(t,1000,220,"(ROIs) per subject",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(2400, token, function(){
+    const g = E("g",{opacity:0}, svg);
+    label(g,780,290,"NOT YET A GRAPH — just:",{size:14,weight:600,color:"var(--s-ink-dim)"});
+    ["ROI 1","ROI 2","ROI 3","⋮","ROI 360"].forEach(function(t,i){
+      const y = 330+i*40;
+      mono(g,790,y,t,{size:13, color:"var(--s-ink-dim)"});
+      sparkline(g,880,y-14,340,26, 200+i, {color:"var(--s-control)", n:50}).reveal(token, i*120, 700);
+    });
+    g.style.transition="opacity .5s"; g.style.opacity=1;
+  });
+});
+
+scene("The Data","From Two Signals to One Edge",
+"Take any two ROIs. Correlate their time series with a Pearson correlation — how similarly do they rise and fall together. A strong positive correlation says these two regions tend to activate together. A negative correlation says they move in opposite directions — and this project keeps that sign, rather than only keeping the strength. That signed correlation number becomes the weight of an edge between them.",
+function(svg, html, token){
+  label(svg, 120, 90, "ROI A", {size:16, weight:700, color:"var(--s-control)"});
+  sparkline(svg,120,110,420,70,15,{color:"var(--s-control)", n:60}).reveal(token,200,1000);
+  label(svg, 120, 230, "ROI B", {size:16, weight:700, color:"var(--s-accent)"});
+  sparkline(svg,120,250,420,70,16,{color:"var(--s-accent)", n:60}).reveal(token,600,1000);
+
+  after(1700, token, function(){
+    const eq = E("g",{opacity:0}, svg);
+    mono(eq,120,400,"Pearson r  =  correlation( ROI A, ROI B )",{size:17});
+    eq.style.transition="opacity .5s"; eq.style.opacity=1;
+  });
+  after(2400, token, function(){
+    const eq2 = E("g",{opacity:0}, svg);
+    mono(eq2,120,440,"r = +0.74   →   move together (excitatory-like)",{size:14.5, color:"var(--s-control)"});
+    mono(eq2,120,470,"r = −0.51   →   move oppositely (kept, signed)",{size:14.5, color:"var(--s-asd)"});
+    eq2.style.transition="opacity .5s"; eq2.style.opacity=1;
+  });
+
+  const a={x:900,y:190}, b={x:900,y:420};
+  after(600,token,function(){
+    const na=E("circle",{cx:a.x,cy:a.y,r:20,style:"fill:var(--s-panel2);stroke:var(--s-control);stroke-width:2.5;opacity:0"},svg);
+    label(svg,a.x,a.y+5,"A",{anchor:"middle",size:14,weight:700});
+    na.style.transition="opacity .4s"; na.style.opacity=1;
+  });
+  after(1000,token,function(){
+    const nb=E("circle",{cx:b.x,cy:b.y,r:20,style:"fill:var(--s-panel2);stroke:var(--s-accent);stroke-width:2.5;opacity:0"},svg);
+    label(svg,b.x,b.y+5,"B",{anchor:"middle",size:14,weight:700});
+    nb.style.transition="opacity .4s"; nb.style.opacity=1;
+  });
+  after(3000, token, function(){
+    const ln = E("line",{x1:a.x,y1:a.y,x2:a.x,y2:a.y, style:"stroke:var(--s-control);stroke-width:5;stroke-linecap:round"}, svg);
+    ln.style.transition="all .7s ease";
+    requestAnimationFrame(function(){ after(20,token,function(){ ln.setAttribute("x2",b.x); ln.setAttribute("y2",b.y); }); });
+    mono(svg, 950, 300, "edge weight = r", {size:12.5, color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("The Data","Sliding the Window: One Subject Becomes Many Graphs",
+"A single correlation over the entire scan would hide exactly what this project needs — whether connectivity changes over time. So instead of one graph, the scan is cut into overlapping thirty-timepoint windows, sliding forward ten timepoints at a time. Every window gets its own functional connectivity matrix, and therefore its own graph. One subject becomes a sequence: G1, G2, G3, and onward.",
+function(svg, html, token){
+  const x0=100, x1=1180, y=160;
+  E("line",{x1:x0,y1:y,x2:x1,y2:y, style:"stroke:var(--s-line);stroke-width:1.5"}, svg);
+  for(let i=0;i<=14;i++){
+    const x = x0+(x1-x0)*i/14;
+    E("line",{x1:x,y1:y-6,x2:x,y2:y+6, style:"stroke:var(--s-line);stroke-width:1"}, svg);
+  }
+  label(svg,x0,y-18,"t → (time, in TRs)",{size:12.5,color:"var(--s-ink-dim)"});
+  mono(svg, x0, y+34, "window = 30 TR    stride = 10 TR", {size:13.5, color:"var(--s-accent)"});
+
+  const winW = (x1-x0)*30/300;
+  const strideW = (x1-x0)*10/300;
+  const wins = [0,1,2];
+  wins.forEach(function(wi){
+    const wx = x0 + wi*strideW;
+    const grp = E("g",{opacity:0}, svg);
+    E("rect",{x:wx,y:y-34,width:winW,height:68, rx:6, style:"fill:none;stroke:var(--s-anomaly);stroke-width:2"}, grp);
+    label(grp, wx+winW/2, y-42, "window "+(wi+1), {anchor:"middle", size:11.5, color:"var(--s-anomaly)"});
+    after(1000+wi*1500, token, function(){ grp.style.transition="opacity .4s"; grp.style.opacity=1; });
+
+    const gx = 180+wi*380, gy = 320, gr=70;
+    after(1500+wi*1500, token, function(){
+      const gg = graphView(svg, gx, gy, gr, [{id:0},{id:1},{id:2},{id:3},{id:4},{id:5}],
+        [{a:0,b:1,w:.6},{a:1,b:2,w:.4},{a:2,b:3,w:-.5},{a:3,b:4,w:.7},{a:4,b:5,w:.3},{a:5,b:0,w:-.4},{a:0,b:3,w:.5}], {});
+      gg.revealNodes(token, 40, 0);
+      gg.revealEdges(token, 40, 260);
+      label(svg, gx, gy+gr+38, "G"+(wi+1), {anchor:"middle", size:16, weight:700, color:"var(--s-anomaly)"});
+    });
+  });
+  after(6200, token, function(){
+    const msg = E("g",{opacity:0},svg);
+    label(msg,640,600,"ONE SUBJECT  →  A SEQUENCE OF GRAPHS  (not one static graph)",{anchor:"middle",size:15,weight:700,color:"var(--s-ink)"});
+    msg.style.transition="opacity .5s"; msg.style.opacity=1;
+  });
+});
+
+scene("The Data","Keeping Only the Strongest 20%",
+"A complete 360-node graph has an enormous number of possible connections — most of them weak and probably spurious. So every window's matrix is sparsified: rank every connection by the absolute strength of its correlation, and keep only the strongest 20 percent. Weak edges disappear. Strong edges remain, still signed, still carrying their original value — only their magnitude decided whether they survived.",
+function(svg, html, token){
+  const cx=340, cy=340, R=220;
+  const rnd = seeded(21);
+  const N = 22;
+  const nodes = []; for(let i=0;i<N;i++) nodes.push({id:i, r:8});
+  const edges = [];
+  for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){ if(rnd()<0.42){ edges.push({a:i,b:j,w:(rnd()*2-1)}); } }
+  const gg = graphView(svg, cx, cy, R, nodes, edges, {edgeOpacity:0.55});
+  gg.revealNodes(token, 18, 100);
+  gg.revealEdges(token, 10, 700);
+
+  after(2600, token, function(){
+    label(svg, 340, 90, "DENSE GRAPH", {anchor:"middle", size:16, weight:700, color:"var(--s-ink-dim)"});
+  });
+
+  const sorted = gg.edgeEls.slice().sort(function(a,b){ return Math.abs(b.e.w)-Math.abs(a.e.w); });
+  const keep = Math.round(sorted.length*0.2);
+  after(3400, token, function(){
+    sorted.forEach(function(o,i){
+      after(i*22, token, function(){
+        if(i<keep){ o.line.style.transition="stroke-width .3s ease"; o.line.setAttribute("style", o.line.getAttribute("style").replace(/stroke-width:[^;]+;/,"stroke-width:"+(1.5+Math.abs(o.e.w)*4)+";")); }
+        else{ o.line.style.transition="opacity .35s ease"; o.line.style.opacity=0; }
+      });
+    });
+  });
+  after(4600, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    card(t,760,220,440,220,{stroke:"var(--s-control)"});
+    label(t,980,270,"TOP 20%", {anchor:"middle", size:24, weight:700, color:"var(--s-control)"});
+    label(t,980,300,"by absolute Pearson r", {anchor:"middle", size:13, color:"var(--s-ink-dim)"});
+    label(t,980,350,"sign is preserved —", {anchor:"middle", size:14});
+    label(t,980,374,"only magnitude decides survival", {anchor:"middle", size:14});
+    label(t,980,410,"self-loops removed", {anchor:"middle", size:12.5, color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("The Data","Splitting Subjects, Not Windows",
+"Before any model sees this data, all 871 subjects are locked into three groups: 609 for training, 131 for validation, 131 for test — stratified so the ASD-to-control ratio holds in each. This split happens at the subject level. Every window from one subject goes entirely into one group. If windows leaked across groups, a model could partly memorize that person's individual connectivity fingerprint instead of learning general dynamics.",
+function(svg, html, token){
+  const pg = populationGrid(svg, 340, 60, 600, 130, 871, {cols:38});
+  pg.reveal(token, 30, 0.6);
+
+  after(1600, token, function(){
+    const groups = [
+      {name:"TRAIN", n:609, sub:"328 Control · 281 ASD", x:70, color:"var(--s-control)"},
+      {name:"VALIDATION", n:131, sub:"70 Control · 61 ASD", x:470, color:"var(--s-accent)"},
+      {name:"TEST", n:131, sub:"70 Control · 61 ASD", x:870, color:"var(--s-anomaly)"}
+    ];
+    groups.forEach(function(g,i){
+      const grp = E("g",{opacity:0}, svg);
+      card(grp,g.x,260,340,150,{stroke:g.color});
+      label(grp,g.x+170,305,g.name,{anchor:"middle",size:19,weight:700,color:g.color});
+      label(grp,g.x+170,335,g.n+" subjects",{anchor:"middle",size:15});
+      mono(grp,g.x+170,368,g.sub,{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+      after(i*350,token,function(){ grp.style.transition="opacity .5s"; grp.style.opacity=1; });
+      arrow(svg, 640, 200, g.x+170, 258, {color:g.color, sw:1.5});
+    });
+  });
+  after(3400, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,175,460,"Phase 1 trains on TRAIN-CONTROL only —", {size:14.5, weight:600, color:"var(--s-control)"});
+    label(t,175,486,"ASD subjects never enter training.", {size:14.5, color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(4100, token, function(){
+    const bad = E("g",{opacity:0}, svg);
+    mono(bad,470,460,"✗ subject window A → train, window B → test", {size:12.5, color:"var(--s-bad)"});
+    mono(bad,470,486,"✓ subject: ALL windows → same split, always", {size:12.5, color:"var(--s-good)"});
+    bad.style.transition="opacity .5s"; bad.style.opacity=1;
+  });
+});
+
+/* ACT 2 — SUBGRAPH + GIN */
+scene("Subgraphs & GIN","One Seed, One Local Neighborhood",
+"Feeding a full 360-node graph straight into a temporal model is both computationally unmanageable and impossible to interpret — 'the brain changed' is not an actionable finding. So the project picks a seed ROI and extracts its one-hop neighborhood: that region, plus everything directly connected to it. This much smaller local subgraph is what actually gets modeled.",
+function(svg, html, token){
+  brainOutline(svg, 300, 340, 170, {stroke:"var(--s-line)", sw:1.75});
+  const rnd = seeded(31);
+  const dots=[];
+  for(let i=0;i<160;i++){
+    const a = rnd()*Math.PI*2, rr=Math.pow(rnd(),0.55)*158;
+    const x = 300+Math.cos(a)*rr, y = 340+Math.sin(a)*rr*0.82;
+    dots.push({x:x,y:y});
+    E("circle",{cx:x,cy:y,r:2.4,style:"fill:var(--s-ink-dim);opacity:.5"}, svg);
+  }
+  const seedIdx = 40;
+  after(700, token, function(){
+    const seedDot = dots[seedIdx];
+    const ring = E("circle",{cx:seedDot.x, cy:seedDot.y, r:6, style:"fill:var(--s-accent);opacity:0"}, svg);
+    ring.style.transition="opacity .4s"; ring.style.opacity=1;
+    label(svg, seedDot.x+14, seedDot.y-10, "seed ROI", {size:12.5, color:"var(--s-accent)", weight:700});
+  });
+  after(1600, token, function(){
+    const arr = E("g",{opacity:0}, svg);
+    arrow(arr, 500, 340, 640, 340, {color:"var(--s-accent)", sw:2.5});
+    arr.style.transition="opacity .4s"; arr.style.opacity=1;
+  });
+  after(2100, token, function(){
+    const cx=940, cy=340;
+    const neigh = [0,1,2,3,4,5,6,7];
+    const nodes = [{id:"seed", r:16, fill:"var(--s-accent)", stroke:"var(--s-accent)"}].concat(neigh.map(function(i){ return {id:i, r:11}; }));
+    const gg = graphView(svg, cx, cy, 110, nodes, neigh.map(function(i){ return {a:"seed", b:i, w:(seeded(i+1)()*1.6-0.8)}; }),
+      {angleOffset:0});
+    // fix seed at center
+    gg.nodeEls["seed"].setAttribute("transform","translate("+cx+","+cy+") scale(0)");
+    gg.pos["seed"] = {x:cx,y:cy};
+    gg.edgeEls.forEach(function(o){ o.a = gg.pos["seed"]; o.line.setAttribute("x1",cx); o.line.setAttribute("y1",cy); });
+    gg.revealNodes(token, 70, 0);
+    gg.revealEdges(token, 70, 500);
+    label(svg, cx, cy+150, "1-hop neighborhood = local subgraph", {anchor:"middle", size:14, color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Subgraphs & GIN","Stable Tracking: Same Circuit, Changing Weights",
+"How do you compare a subgraph across time if its membership keeps shifting? Two options were tested. Dynamic tracking lets neighborhood membership change every window — measured directly, that gave a mean overlap of only 0.378 between consecutive windows: barely the same graph. Stable tracking instead fixes ROI membership once, at a reference window, and only lets the edge weights evolve. That is what the project uses — because it lets a change in connectivity mean one unambiguous thing: this physical circuit behaved differently.",
+function(svg, html, token){
+  label(svg,220,80,"DYNAMIC TRACKING",{anchor:"middle",size:17,weight:700,color:"var(--s-bad)"});
+  label(svg,1000,80,"STABLE TRACKING",{anchor:"middle",size:17,weight:700,color:"var(--s-good)"});
+  E("line",{x1:640,y1:60,x2:640,y2:640,style:"stroke:var(--s-line);stroke-width:1"},svg);
+
+  const dynSets = [["A","B","C","D"],["A","B","E","F"],["A","G","H","F"]];
+  const stableSet = ["A","B","C","D"];
+  [0,1,2].forEach(function(ti){
+    const y = 160+ti*150;
+    label(svg,60,y+8,"t"+(ti+1),{size:14,weight:700,color:"var(--s-ink-dim)"});
+    const gL = E("g",{opacity:0}, svg);
+    dynSets[ti].forEach(function(lab,i){
+      const x = 130+i*90;
+      E("circle",{cx:x,cy:y,r:22,style:"fill:var(--s-panel2);stroke:var(--s-bad);stroke-width:2"},gL);
+      label(gL,x,y+5,lab,{anchor:"middle",size:14,weight:700});
+    });
+    after(400+ti*900, token, function(){ gL.style.transition="opacity .4s"; gL.style.opacity=1; });
+
+    const gR = E("g",{opacity:0}, svg);
+    stableSet.forEach(function(lab,i){
+      const x = 850+i*90;
+      const w = 0.3+ti*0.3+seeded(i*7+ti)()*0.3;
+      E("circle",{cx:x,cy:y,r:22,style:"fill:var(--s-panel2);stroke:var(--s-good);stroke-width:"+(1.5+w*3)},gR);
+      label(gR,x,y+5,lab,{anchor:"middle",size:14,weight:700});
+    });
+    after(400+ti*900, token, function(){ gR.style.transition="opacity .4s"; gR.style.opacity=1; });
+  });
+  after(3400, token, function(){
+    const m = E("g",{opacity:0}, svg);
+    mono(m,220,600,"mean Jaccard ≈ 0.378",{anchor:"middle",size:15,color:"var(--s-bad)"});
+    mono(m,1000,600,"same 4 ROIs every window —",{anchor:"middle",size:13.5,color:"var(--s-good)"});
+    mono(m,1000,622,"only the ring thickness (weight) changes",{anchor:"middle",size:13.5,color:"var(--s-good)"});
+    m.style.transition="opacity .5s"; m.style.opacity=1;
+  });
+});
+
+scene("Subgraphs & GIN","Why Only 20 Seed ROIs?",
+"The extraction method works for all 360 candidate ROIs as seeds — that is not the limitation. The limitation is compute: extracting all 360, for every subject, every epoch, measured at roughly 71 seconds per subject — about 12 hours for one pass over the 609 training subjects, repeated every epoch. So Phase 1 trains and evaluates on a fixed, deterministic, stratified subsample: 20 seed ROIs, chosen once with a fixed random seed, cached to disk. A compute-budget decision, documented as exactly that.",
+function(svg, html, token){
+  const pg = populationGrid(svg, 60, 90, 1160, 260, 360, {cols:36});
+  pg.reveal(token, 4, 0.4);
+  const chosen = [];
+  const rnd = seeded(9);
+  while(chosen.length<20){ const i = Math.floor(rnd()*360); if(chosen.indexOf(i)<0) chosen.push(i); }
+  after(1500, token, function(){ pg.colorGroup(token,0,chosen,"var(--s-accent)"); });
+  after(2000, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,410,"360 candidate ROIs → 20 deterministic seeds",{anchor:"middle",size:17,weight:700});
+    mono(t,640,440,"selection_seed = 42",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(2700, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,640,500,"~71 s / subject × 609 subjects ≈ 12 hours — per epoch, at full scale",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+    label(t,640,540,"a compute-budget decision — not a limit of the extraction method",{anchor:"middle",size:14,weight:600,color:"var(--s-accent)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Subgraphs & GIN","GIN: Watching a Node Listen to Its Neighbors",
+"A subgraph is nodes and weighted edges — not something a recurrent network can consume directly. The weighted GIN turns it into one vector. Watch node C. Every neighbor — B, A, D, E — sends C a message, and that message is scaled by the real signed connectivity weight on that specific edge. C aggregates everything it receives, combines that with its own previous state, and updates. This happens for every node, twice — two GIN layers — so information has time to travel two hops through the neighborhood.",
+function(svg, html, token){
+  const cx=440, cy=340;
+  const others = [{id:"B",dx:0,dy:-170},{id:"A",dx:-190,dy:60},{id:"D",dx:190,dy:60},{id:"E",dx:0,dy:190}];
+  const nodePos = {"C":{x:cx,y:cy}};
+  others.forEach(function(o){ nodePos[o.id] = {x:cx+o.dx, y:cy+o.dy}; });
+  const weights = {"B":0.8,"A":-0.5,"D":0.65,"E":0.3};
+
+  Object.keys(nodePos).forEach(function(id){
+    const p = nodePos[id];
+    if(id!=="C") E("line",{x1:p.x,y1:p.y,x2:cx,y2:cy, style:"stroke:"+(weights[id]<0?"var(--s-asd)":"var(--s-control)")+";stroke-width:"+(1+Math.abs(weights[id])*4)+";opacity:.55"}, svg);
+  });
+  Object.keys(nodePos).forEach(function(id){
+    const p = nodePos[id];
+    const isC = id==="C";
+    const circ = E("circle",{cx:p.x,cy:p.y,r:isC?30:22,style:"fill:var(--s-panel2);stroke:var(--s-accent);stroke-width:2.5;opacity:0"}, svg);
+    label(svg,p.x,p.y+6,id,{anchor:"middle",size:isC?18:15,weight:700});
+    if(!isC) mono(svg,p.x,p.y+(p.y<cy?-32:40), "w="+weights[id].toFixed(2), {anchor:"middle", size:11.5, color:weights[id]<0?"var(--s-asd)":"var(--s-control)"});
+    fade(circ, 0);
+  });
+  label(svg,cx,cy-52,"h = 1.0",{anchor:"middle",size:10.5,color:"var(--s-ink-dim)"});
+
+  after(1500, token, function(){
+    const lab = E("g",{opacity:0}, svg);
+    label(lab, 900, 140, "message from u → v:", {size:15, weight:600});
+    mono(lab, 900, 170, "m = w(u,v) · h(u)", {size:16, color:"var(--s-accent)"});
+    lab.style.transition="opacity .5s"; lab.style.opacity=1;
+  });
+  ["B","A","D","E"].forEach(function(id,i){
+    after(2200+i*650, token, function(){
+      const p = nodePos[id];
+      const pulse = E("circle",{cx:p.x,cy:p.y,r:8,style:"fill:var(--s-accent);opacity:1"}, svg);
+      pulse.style.transition="all .65s ease";
+      requestAnimationFrame(function(){ after(20,token,function(){
+        pulse.setAttribute("cx",cx); pulse.setAttribute("cy",cy); pulse.setAttribute("r",3); pulse.style.opacity=0;
+      }); });
+      after(650, token, function(){
+        const ring = document.querySelectorAll("circle")[0];
+      });
+    });
+  });
+  after(5000, token, function(){
+    const c = document.querySelectorAll("svg circle");
+    const cCirc = Array.from(c).find(function(el){ return +el.getAttribute("cx")===cx && +el.getAttribute("cy")===cy; });
+    if(cCirc){ cCirc.style.transition="fill .5s ease, stroke .5s ease"; cCirc.setAttribute("style", cCirc.getAttribute("style").replace(/fill:[^;]+;/,"fill:var(--s-accent);")); }
+    const t = E("g",{opacity:0}, svg);
+    label(t,900,260,"C aggregates all incoming",{size:14.5});
+    label(t,900,284,"messages → its representation changes",{size:14.5});
+    mono(t,900,320,"layer 1 done — repeat once more (layer 2)",{size:12.5, color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Subgraphs & GIN","The Actual GIN Update Rule",
+"Written precisely, this is what happens at every node v, every layer. The neighbor sum uses the real weighted edges, not just a count of neighbors. Epsilon is a small trainable constant that controls how much a node trusts its own previous state versus its neighbors. An MLP then transforms the combined signal into the node's new representation. This weighted, signed formulation — not a generic unweighted GCN rule — is what lets the model be sensitive to connectivity strength, which matters enormously once Phase 2 starts perturbing exactly those weights.",
+function(svg, html, token){
+  const steps = [
+    {t:"m(v)  =  Σ  w(u,v) · h(u)", s:"sum of weighted neighbor messages"},
+    {t:"h'(v) = MLP( (1+ε)·h(v) + m(v) )", s:"combine with own state, transform"}
+  ];
+  steps.forEach(function(st,i){
+    const y = 200+i*180;
+    const g = E("g",{opacity:0}, svg);
+    card(g,140,y,1000,130,{});
+    mono(g,640,y+65,st.t,{anchor:"middle",size:26,weight:600,color:"var(--s-accent)"});
+    label(g,640,y+100,st.s,{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    after(i*1700+300, token, function(){ g.style.transition="opacity .6s"; g.style.opacity=1; });
+  });
+  after(3900, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,600,"weighted, signed edges — not a generic unweighted GCN rule",{anchor:"middle",size:14.5,weight:600,color:"var(--s-control)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Subgraphs & GIN","Pooling Into a 128-Dimensional Embedding",
+"After two layers of message passing, every node has its own updated representation. Global mean pooling then averages all of those node vectors into one single vector describing the whole subgraph — and a final linear layer projects that down to exactly 128 dimensions. The subgraph — nodes, edges, weights, structure — has become one point in a 128-dimensional space.",
+function(svg, html, token){
+  const cx=260, cy=340;
+  const nodes=[]; for(let i=0;i<7;i++) nodes.push({id:i,r:16});
+  const gg = graphView(svg, cx, cy, 100, nodes, [{a:0,b:1,w:.5},{a:1,b:2,w:.3},{a:2,b:3,w:-.4},{a:3,b:4,w:.6},{a:4,b:5,w:.2},{a:5,b:6,w:-.3},{a:6,b:0,w:.4},{a:0,b:3,w:.5}], {});
+  gg.revealNodes(token, 60, 0);
+  gg.revealEdges(token, 60, 500);
+  after(1400, token, function(){
+    const arr = E("g",{opacity:0}, svg);
+    label(arr,cx,cy+150,"global mean pool",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    arrow(arr, 420, cy, 560, cy, {color:"var(--s-accent)", sw:2.5});
+    arr.style.transition="opacity .4s"; arr.style.opacity=1;
+  });
+  after(2200, token, function(){
+    const vb = vectorBox(svg, 640, cy-14, 128, 4.6, 28, 55, {});
+    vb.reveal(token, 0, 5);
+    label(svg, 640, cy-40, "linear projection →", {size:13.5, color:"var(--s-ink-dim)"});
+    mono(svg, 640, cy+52, "128-dimensional embedding  z", {size:15, weight:600, color:"var(--s-accent)"});
+  });
+  after(3600, token, function(){
+    mono(svg, 640, 620, "[ 0.23, −0.71, 0.15, …, 0.42 ]", {size:13.5, color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Subgraphs & GIN","One Vector Per Window: A New Kind of Sequence",
+"Do this once for every time window in a subject's sequence, and the graph problem quietly becomes a completely different problem. G1 becomes z1. G2 becomes z2. And so on, through zT. The spatial structure of the brain has been compressed away — what is left is a sequence of vectors, evolving through time. That sequence is exactly what a recurrent model can work with.",
+function(svg, html, token){
+  const labels = ["G₁ → z₁","G₂ → z₂","G₃ → z₃","⋯","Gᵀ → zᵀ"];
+  labels.forEach(function(l,i){
+    const x = 140+i*230;
+    const g = E("g",{opacity:0}, svg);
+    card(g,x,300,190,110,{});
+    mono(g,x+95,365,l,{anchor:"middle",size:18,weight:600,color:"var(--s-accent)"});
+    after(500+i*550, token, function(){ g.style.transition="opacity .5s"; g.style.opacity=1; });
+    if(i>0){
+      const a = E("g",{opacity:0}, svg);
+      arrow(a, x-40,355,x-6,355,{color:"var(--s-line)",sw:2});
+      after(500+i*550-260, token, function(){ a.style.transition="opacity .3s"; a.style.opacity=1; });
+    }
+  });
+  after(3500, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,500,"a spatial problem has become a TEMPORAL one:",{anchor:"middle",size:16,weight:700});
+    mono(t,640,530,"z₁, z₂, z₃, …, zᵀ  —  a sequence of 128-D points",{anchor:"middle",size:15,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+/* ACT 3 — PHASE 1 */
+scene("Phase 1","GRU: Predicting the Next Embedding",
+"A GRU — a gated recurrent unit — reads embeddings one at a time and keeps a hidden state summarizing everything seen so far. Feed it z1: it updates its hidden state. Feed it z2: updates again. At every step, its actual job is to predict what the next embedding will be, before being shown it. So from z1 through zt, the GRU produces a prediction — z-hat, t plus one — its best guess at what the subgraph will look like next.",
+function(svg, html, token){
+  const steps = ["z₁","z₂","z₃","zᵀ"];
+  steps.forEach(function(s,i){
+    const x = 100+i*260;
+    const zg = E("g",{opacity:0}, svg);
+    E("circle",{cx:x,cy:220,r:26,style:"fill:var(--s-panel2);stroke:var(--s-control);stroke-width:2"}, zg);
+    mono(zg,x,226,s,{anchor:"middle",size:16,weight:700,color:"var(--s-control)"});
+    after(400+i*750, token, function(){ zg.style.transition="opacity .4s"; zg.style.opacity=1; });
+
+    const gg = E("g",{opacity:0}, svg);
+    card(gg,x-46,340,92,60,{stroke:"var(--s-accent)"});
+    label(gg,x,376,"GRU",{anchor:"middle",size:15,weight:700,color:"var(--s-accent)"});
+    after(500+i*750, token, function(){ gg.style.transition="opacity .4s"; gg.style.opacity=1; });
+    arrow(svg, x, 246, x, 338, {color:"var(--s-line)", sw:2});
+    if(i>0) arrow(svg, x-214, 400, x-46, 400, {color:"var(--s-accent)", sw:2, dash:true});
+  });
+  after(3600, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    card(t,900,540,300,110,{stroke:"var(--s-anomaly)"});
+    mono(t,1050,590,"ẑᵀ⁺¹",{anchor:"middle",size:26,weight:700,color:"var(--s-anomaly)"});
+    label(t,1050,622,"predicted next embedding",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    arrow(svg, 780, 400, 900, 570, {color:"var(--s-anomaly)", sw:2.5});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 1","Training: Control Subjects Only",
+"Now watch the full Phase 1 training loop. Only the 328 train-control subjects enter. ASD subjects, validation subjects, test subjects — all blocked, visibly, from this stage. Each control subject's subgraph sequence passes through the GIN, becomes embeddings, passes through the GRU, produces a next-embedding prediction, and that prediction is compared against the real next embedding to compute a loss. That loss backpropagates through both the GIN and the GRU together — they are trained jointly, from scratch, as one system.",
+function(svg, html, token){
+  const blocked = [
+    {t:"ASD subjects", x:80, y:80},
+    {t:"Validation subjects", x:80, y:150},
+    {t:"Test subjects", x:80, y:220}
+  ];
+  blocked.forEach(function(b,i){
+    const g = E("g",{opacity:0}, svg);
+    card(g,b.x,b.y,260,50,{stroke:"var(--s-bad)", fill:"var(--s-panel)"});
+    label(g,b.x+130,b.y+31,b.t,{anchor:"middle",size:13.5,color:"var(--s-bad)"});
+    mono(svg,b.x+270,b.y+31,"✕",{size:18,color:"var(--s-bad)"});
+    after(i*300,token,function(){ g.style.transition="opacity .4s"; g.style.opacity=1; });
+  });
+  after(1100, token, function(){
+    const steps = [
+      {t:"328 train-control subjects"},
+      {t:"stable subgraphs (20 seeds)"},
+      {t:"weighted GIN → embeddings"},
+      {t:"GRU → next-embedding prediction"},
+      {t:"prediction loss"},
+      {t:"backprop"},
+      {t:"GIN + GRU updated jointly", highlight:true}
+    ];
+    pipelineFlow(svg, steps, {x:440, y:70, w:400, h:60, gap:16, delay:480}, token);
+  });
+});
+
+scene("Phase 1","Guarding Against Collapse",
+"There is a trivial way for this loss to look good while learning nothing: map every subgraph to the same output vector. If embeddings collapse to a point, next-embedding prediction becomes free — and the model has learned literally nothing about brain dynamics. This is checked, not assumed. A variance penalty during training pushes embeddings apart, and directly after training, the measured embedding standard deviation was 1.03 to 1.16 across dimensions — far from the collapsed value of zero.",
+function(svg, html, token){
+  label(svg,300,90,"COLLAPSED (failure mode)",{anchor:"middle",size:15,weight:700,color:"var(--s-bad)"});
+  label(svg,940,90,"ACTUAL (measured)",{anchor:"middle",size:15,weight:700,color:"var(--s-good)"});
+  const rnd1 = seeded(51);
+  for(let i=0;i<80;i++){
+    const x = 300+(rnd1()-0.5)*16, y=340+(rnd1()-0.5)*16;
+    const c = E("circle",{cx:x,cy:y,r:3,style:"fill:var(--s-bad);opacity:0"},svg);
+    after(300+i*8,token,function(){ c.style.transition="opacity .3s"; c.style.opacity=.8; });
+  }
+  const rnd2 = seeded(52);
+  for(let i=0;i<80;i++){
+    const x = 940+(rnd2()-0.5)*280, y=340+(rnd2()-0.5)*280;
+    const c = E("circle",{cx:x,cy:y,r:3,style:"fill:var(--s-good);opacity:0"},svg);
+    after(1400+i*8,token,function(){ c.style.transition="opacity .3s"; c.style.opacity=.8; });
+  }
+  E("circle",{cx:300,cy:340,r:120,style:"fill:none;stroke:var(--s-line);stroke-dasharray:4,4"},svg);
+  E("circle",{cx:940,cy:340,r:120,style:"fill:none;stroke:var(--s-line);stroke-dasharray:4,4"},svg);
+  after(2800, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,300,520,"std ≈ 0",{anchor:"middle",size:20,weight:700,color:"var(--s-bad)"});
+    label(t,300,548,"model learned nothing",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    mono(t,940,520,"std = 1.03 – 1.16",{anchor:"middle",size:20,weight:700,color:"var(--s-good)"});
+    label(t,940,548,"no collapse — confirmed",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 1","The Anomaly Score: A Distance Between Two Vectors",
+"Once trained, the model is shown a real transition and asked to predict it — without being told the answer. Here is the actual next embedding. Here is the GRU's prediction. The anomaly score is simply the distance between them: the norm of their difference. A small distance means the transition looked exactly like what a healthy subject would do. A large distance means something unexpected happened — whether or not that subject turns out to be ASD.",
+function(svg, html, token){
+  const vb1 = vectorBox(svg, 200, 160, 40, 9, 30, 61, {});
+  label(svg,200,140,"ACTUAL  zᵀ⁺¹",{size:14,weight:700,color:"var(--s-control)"});
+  vb1.reveal(token, 300, 12);
+
+  const vb2 = vectorBox(svg, 200, 300, 40, 9, 30, 62, {});
+  label(svg,200,280,"PREDICTED  ẑᵀ⁺¹",{size:14,weight:700,color:"var(--s-anomaly)"});
+  vb2.reveal(token, 900, 12);
+
+  after(1800, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,200,420,"Aᵀ = || zᵀ⁺¹ − ẑᵀ⁺¹ ||",{size:22,weight:600,color:"var(--s-accent)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(2600, token, function(){
+    const g1 = E("g",{opacity:0}, svg);
+    card(g1,760,150,180,150,{stroke:"var(--s-good)"});
+    mono(g1,850,210,"small Aᵀ",{anchor:"middle",size:16,weight:700,color:"var(--s-good)"});
+    label(g1,850,240,"looks normal",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    label(g1,850,268,"distance ≈ 2",{anchor:"middle",size:12,color:"var(--s-ink-dim)"});
+    g1.style.transition="opacity .5s"; g1.style.opacity=1;
+
+    const g2 = E("g",{opacity:0}, svg);
+    card(g2,980,150,220,150,{stroke:"var(--s-bad)"});
+    mono(g2,1090,210,"large Aᵀ",{anchor:"middle",size:16,weight:700,color:"var(--s-bad)"});
+    label(g2,1090,240,"looks anomalous",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    label(g2,1090,268,"distance ≈ 15+",{anchor:"middle",size:12,color:"var(--s-ink-dim)"});
+    g2.style.transition="opacity .5s"; g2.style.opacity=1;
+  });
+});
+
+scene("Phase 1","Bug: One Threshold, 280 Rolls of the Dice",
+"Here is a real mistake, caught by running the numbers. The first approach set one threshold per individual transition — the 95th percentile of healthy validation scores — and flagged a subject if any of their roughly 280 transitions crossed it. The result: 131 of 131 test subjects flagged. Every single one, healthy or not. Why? With 280 independent rolls of the dice at a 95th-percentile cutoff, about 14 are expected to cross the line by chance alone, for any subject.",
+function(svg, html, token){
+  const x0=140, x1=1140, y=220;
+  E("line",{x1:x0,y1:y,x2:x1,y2:y, style:"stroke:var(--s-line);stroke-width:1.5"},svg);
+  const rnd = seeded(71);
+  const n=60;
+  let crossX = null;
+  for(let i=0;i<n;i++){
+    const x = x0+(x1-x0)*i/(n-1);
+    const cross = rnd()>0.965;
+    if(cross && crossX===null) crossX = x;
+    const tick = E("line",{x1:x,y1:y-10,x2:x,y2:y+10, style:"stroke:"+(cross?"var(--s-bad)":"var(--s-line)")+";stroke-width:"+(cross?2.5:1)+";opacity:0"},svg);
+    after(20*i, token, function(){ tick.style.transition="opacity .2s"; tick.style.opacity=1; });
+  }
+  label(svg,x0,y-40,"one subject — ~280 transitions (60 shown)",{size:13.5,color:"var(--s-ink-dim)"});
+  after(1400, token, function(){
+    if(crossX){
+      const lbl = E("g",{opacity:0}, svg);
+      label(lbl, crossX, y+40, "↑ one crossing is enough to flag", {anchor:"middle", size:12.5, color:"var(--s-bad)"});
+      lbl.style.transition="opacity .4s"; lbl.style.opacity=1;
+    }
+  });
+  after(2200, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,640,340,"131 / 131 test subjects flagged",{anchor:"middle",size:26,weight:700,color:"var(--s-bad)"});
+    label(t,640,375,"healthy and ASD, indiscriminately",{anchor:"middle",size:14,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(3400, token, function(){
+    const fix = E("g",{opacity:0}, svg);
+    pipelineFlow(fix, [
+      {t:"all transition scores"},
+      {t:"MAX per subject"},
+      {t:"τ_subject (P95 of that statistic)"},
+      {t:"final subject flag", highlight:true}
+    ], {x:340, y:440, w:600, h:44, gap:10, delay:380}, token);
+    fix.style.transition="opacity .5s"; fix.style.opacity=1;
+  });
+  after(5200, token, function(){
+    mono(svg, 640, 660, "τ_transition = 7.435    τ_subject = 19.813    →   4 / 131 flagged", {anchor:"middle", size:14.5, weight:600, color:"var(--s-good)"});
+  });
+});
+
+scene("Phase 1","Phase 1 Result: The Honest Floor",
+"Measured on the 131 held-out test subjects: Precision 0.500, Recall 0.033, F1 0.062, AUROC 0.453, AUPRC 0.467. An AUROC of 0.453 is at chance — 0.5 would be a coin flip. This is reported as measured. ABIDE gives a whole-subject diagnosis, not a label on any specific transition, so a 'worst moment' score is a genuinely weak proxy. Phase 1's honest role in this project is to be the floor: it establishes normal dynamics, it produces the anomaly score, and it hands both to Phase 2. It is not the final result.",
+function(svg, html, token){
+  const bc = barChart(svg, 140, 130, 1000, 280, [
+    {label:"Precision", v:0.500, color:"var(--s-accent)"},
+    {label:"Recall", v:0.033, color:"var(--s-bad)"},
+    {label:"F1", v:0.062, color:"var(--s-bad)"},
+    {label:"AUROC", v:0.453, color:"var(--s-asd)"},
+    {label:"AUPRC", v:0.467, color:"var(--s-accent)"},
+  ], {max:1.0, refLine:0.5, refLabel:"chance = 0.5"});
+  bc.reveal(token, 300, 220);
+  after(2200, token, function(){
+    pipelineFlow(svg, [
+      {t:"learn normal dynamics"},
+      {t:"anomaly score"},
+      {t:"baseline detector"},
+      {t:"model handed to Phase 2", highlight:true}
+    ], {x:820, y:440, w:340, h:52, gap:18, delay:420}, token);
+  });
+});
+
+/* ACT 4 — PHASE 2 */
+scene("Phase 2","From “What Is Normal” to “Can We Create a Deviation”",
+"Phase 1 answered: what does normal look like. Phase 2 asks the harder question: starting from that same trained model, can we deliberately create a meaningful deviation — one the model itself would recognize as unusual? The trained GIN and GRU do not get retrained here. They become the engine that drives anomaly generation.",
+function(svg, html, token){
+  const g1 = E("g",{opacity:0}, svg);
+  card(g1,140,220,440,220,{stroke:"var(--s-control)"});
+  label(g1,360,300,"PHASE 1 asked:",{anchor:"middle",size:16,color:"var(--s-ink-dim)"});
+  label(g1,360,340,"“What does normal look like?”",{anchor:"middle",size:20,weight:700,color:"var(--s-control)"});
+  after(300, token, function(){ g1.style.transition="opacity .6s"; g1.style.opacity=1; });
+
+  after(1600, token, function(){
+    const arr = E("g",{opacity:0},svg);
+    arrow(arr, 600, 330, 700, 330, {color:"var(--s-anomaly)", sw:3});
+    arr.style.transition="opacity .5s"; arr.style.opacity=1;
+  });
+  after(2000, token, function(){
+    const g2 = E("g",{opacity:0}, svg);
+    card(g2,700,220,440,220,{stroke:"var(--s-anomaly)"});
+    label(g2,920,300,"PHASE 2 asks:",{anchor:"middle",size:16,color:"var(--s-ink-dim)"});
+    label(g2,920,340,"“Can we deliberately create",{anchor:"middle",size:19,weight:700,color:"var(--s-anomaly)"});
+    label(g2,920,368,"a meaningful deviation?”",{anchor:"middle",size:19,weight:700,color:"var(--s-anomaly)"});
+    g2.style.transition="opacity .6s"; g2.style.opacity=1;
+  });
+  after(3600, token, function(){
+    mono(svg, 640, 530, "the trained GIN + GRU is not retrained — it becomes the generator's engine", {anchor:"middle", size:14, color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Phase 2","Which Edges Would Fool the Model Most?",
+"Take a real transition from a real, normal train-control subject. The model can tell us, via its own gradient, exactly how much changing each edge weight would increase its own prediction error. Every edge gets a sensitivity score. Sort them, and a clear ranking appears — most edges barely matter, a handful matter enormously. The top 15 percent of undirected edge-pairs, by that combined sensitivity, are selected as the targets.",
+function(svg, html, token){
+  const rnd = seeded(81);
+  const data = [];
+  for(let i=0;i<26;i++) data.push({v: Math.pow(rnd(),2.2)});
+  data.sort(function(a,b){ return a.v-b.v; });
+  const w=1080/26;
+  data.forEach(function(d,i){
+    const x = 100+i*w;
+    const h = 20+d.v*320;
+    const r = E("rect",{x:x,y:520-h,width:w*0.62,height:h,rx:3, style:"fill:var(--s-line);opacity:0"}, svg);
+    after(30*i, token, function(){ r.style.transition="opacity .3s"; r.style.opacity=1; d._el=r; });
+    d._x=x; d._h=h; d._w=w*0.62;
+  });
+  after(900, token, function(){
+    label(svg,640,90,"edge sensitivity  ∂(error) / ∂(edge weight)",{anchor:"middle",size:16,weight:600});
+  });
+  const keep = Math.round(data.length*0.15);
+  after(1600, token, function(){
+    data.forEach(function(d,i){
+      after((data.length-1-i)*40, token, function(){
+        if(i>=data.length-keep){
+          d._el.style.transition="fill .3s ease";
+          d._el.setAttribute("style", d._el.getAttribute("style").replace(/fill:[^;]+;/, "fill:var(--s-anomaly);"));
+        }
+      });
+    });
+  });
+  after(3200, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,570,"LOW → MEDIUM → HIGH → VERY HIGH sensitivity",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    label(t,640,600,"top 15% of undirected edge-pairs selected",{anchor:"middle",size:16,weight:700,color:"var(--s-anomaly)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 2","Bug: One Big Step Overshoots",
+"The first implementation pushed those edges with one large gradient step, sized directly to the desired severity. Tested at severities 0.25, 0.55, and 0.9, the anomaly score went 5.28, then 8.03, then dropped to 5.03. Not monotonic. A large step overshoots the region where the gradient's straight-line direction stays valid — the GIN's ReLU nonlinearities mean a big jump can land in a completely different regime. The fix: five small steps, recomputing the gradient fresh at every step — a PGD-style iterative update.",
+function(svg, html, token){
+  const pts = [[0.25,5.28],[0.55,8.03],[0.9,5.03]];
+  const x0=160,x1=560,y0=460,y1=140;
+  E("line",{x1:x0,y1:y0,x2:x1,y2:y0,style:"stroke:var(--s-line);stroke-width:1"},svg);
+  E("line",{x1:x0,y1:y0,x2:x0,y2:y1,style:"stroke:var(--s-line);stroke-width:1"},svg);
+  label(svg,x0-20,y0+24,"0.25",{size:11,anchor:"middle",color:"var(--s-ink-dim)"});
+  label(svg,(x0+x1)/2,y0+24,"severity α",{size:12.5,anchor:"middle",color:"var(--s-ink-dim)"});
+  label(svg,x1,y0+24,"0.9",{size:11,anchor:"middle",color:"var(--s-ink-dim)"});
+  let d = "";
+  pts.forEach(function(p,i){ const x=x0+(p[0]-0.25)/(0.9-0.25)*(x1-x0); const y=y0-(p[1]/10)*(y0-y1); d+=(i===0?"M":"L")+x+","+y+" "; });
+  const path = E("path",{d:d, style:"fill:none;stroke:var(--s-bad);stroke-width:2.5"},svg);
+  const len=900; path.style.strokeDasharray=len; path.style.strokeDashoffset=len;
+  after(500, token, function(){ path.style.transition="stroke-dashoffset 1.2s ease"; path.style.strokeDashoffset=0; });
+  pts.forEach(function(p,i){
+    const x=x0+(p[0]-0.25)/(0.9-0.25)*(x1-x0); const y=y0-(p[1]/10)*(y0-y1);
+    after(500+i*400, token, function(){
+      const c = E("circle",{cx:x,cy:y,r:5,style:"fill:var(--s-bad);opacity:0"},svg);
+      mono(svg,x,y-14,p[1].toFixed(2),{anchor:"middle",size:12,color:"var(--s-bad)"});
+      c.style.transition="opacity .3s"; c.style.opacity=1;
+    });
+  });
+  label(svg,360,110,"ONE BIG STEP → non-monotonic",{anchor:"middle",size:14,weight:700,color:"var(--s-bad)"});
+
+  after(2400, token, function(){
+    const gsteps = E("g",{opacity:0}, svg);
+    label(gsteps,940,110,"FIVE SMALL STEPS (PGD-style)",{anchor:"middle",size:14,weight:700,color:"var(--s-good)"});
+    [1,2,3,4,5].forEach(function(n,i){
+      const x = 760+i*90;
+      card(gsteps,x,150,74,50,{stroke:"var(--s-good)"});
+      label(gsteps,x+37,180,"step "+n,{anchor:"middle",size:12,weight:600,color:"var(--s-good)"});
+      if(i>0) arrow(gsteps, x-16,175,x-6,175,{color:"var(--s-good)", sw:1.75});
+    });
+    label(gsteps,940,225,"recompute gradient each step",{anchor:"middle",size:12,color:"var(--s-ink-dim)"});
+    gsteps.style.transition="opacity .5s"; gsteps.style.opacity=1;
+  });
+  after(3400, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,940,300,"5.76 → 6.04 → 6.84 → 7.54 → 8.17 → 8.67 → 9.38 → 9.76",{anchor:"middle",size:13,color:"var(--s-good)"});
+    label(t,940,326,"strictly increasing, every time",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 2","Validity Check: What Actually Changed",
+"After the five perturbation steps, the generated subgraph is validated against every constraint the project cares about. Weights stay in the valid range. Symmetry is preserved — an edge's weight in both directions still matches. No self-loops are introduced. And critically: no node was added or removed, and no edge was added or removed. Only the weights of edges that already existed were allowed to move. This is a connectivity-strength anomaly, not a topology-changing one.",
+function(svg, html, token){
+  const cl = checklist(svg, 200, 140, [
+    "weights stay in valid range [−1, 1]",
+    "symmetry preserved  (w_ij = w_ji)",
+    "no self-loops introduced",
+    "node identity unchanged",
+    "edge identity unchanged — only weights move"
+  ], {});
+  cl.reveal(token, 300, 480);
+  after(2800, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    card(t,760,140,380,320,{stroke:"var(--s-anomaly)"});
+    label(t,950,190,"VALID GENERATED", {anchor:"middle", size:17, weight:700, color:"var(--s-anomaly)"});
+    label(t,950,216,"ANOMALY", {anchor:"middle", size:17, weight:700, color:"var(--s-anomaly)"});
+    label(t,950,260,"edge weights changed —", {anchor:"middle", size:13.5});
+    label(t,950,284,"same nodes, same edges,", {anchor:"middle", size:13.5});
+    label(t,950,308,"same graph identity", {anchor:"middle", size:13.5});
+    label(t,950,352,"a connectivity-strength anomaly,", {anchor:"middle", size:12.5, color:"var(--s-ink-dim)"});
+    label(t,950,374,"not a topology-changing one", {anchor:"middle", size:12.5, color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 2","Structure-Aware vs. Random: A Fair Comparison",
+"To know whether targeting matters, the identical edit budget was also spent by choosing edges at random and pushing them with a random sign — no gradient involved. Same number of edges touched, same maximum step size, only the selection method differs. Watch the severity climb on both sides. Structure-aware rises cleanly: 4.02, 5.82, 7.63. Random stays essentially flat and noisy: 2.91, 2.88, 2.84 — it never learns to get more severe, because it isn't aimed at anything.",
+function(svg, html, token){
+  E("line",{x1:640,y1:70,x2:640,y2:640,style:"stroke:var(--s-line);stroke-width:1"},svg);
+  label(svg,320,90,"STRUCTURE-AWARE",{anchor:"middle",size:16,weight:700,color:"var(--s-control)"});
+  label(svg,960,90,"RANDOM",{anchor:"middle",size:16,weight:700,color:"var(--s-ink-dim)"});
+  const bc1 = barChart(svg, 140, 140, 380, 300, [
+    {label:"low", v:4.02, color:"var(--s-control)"},{label:"med", v:5.82, color:"var(--s-control)"},{label:"high", v:7.63, color:"var(--s-control)"}
+  ], {max:9});
+  bc1.reveal(token, 400, 260);
+  const bc2 = barChart(svg, 780, 140, 380, 300, [
+    {label:"low", v:2.91, color:"var(--s-ink-dim)"},{label:"med", v:2.88, color:"var(--s-ink-dim)"},{label:"high", v:2.84, color:"var(--s-ink-dim)"}
+  ], {max:9});
+  bc2.reveal(token, 1600, 260);
+  after(3000, token, function(){
+    label(svg,320,560,"monotonic — a clean, controllable dial",{anchor:"middle",size:13.5,color:"var(--s-control)"});
+    label(svg,960,560,"flat and noisy — aimed at nothing",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Phase 2","The 9× Result",
+"Here is the headline number. At high severity, structure-aware anomalies are flagged by Phase 1's own detector 45.8% of the time. Random perturbation of the exact same edit budget: 4.8%. That is roughly nine times more detectable — and it required no threshold tuning to appear. This is the central, validated evidence that the generator is exploiting real, model-relevant structure, not simply injecting bigger numbers. It does not mean these are clinically realistic ASD patterns — it means they are meaningfully different from noise, under this project's own detector.",
+function(svg, html, token){
+  const g1 = E("g",{opacity:0}, svg);
+  card(g1,140,220,420,240,{stroke:"var(--s-control)"});
+  label(g1,350,270,"HIGH SEVERITY",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+  label(g1,350,300,"STRUCTURE-AWARE",{anchor:"middle",size:15,weight:700,color:"var(--s-control)"});
+  mono(g1,350,390,"45.8%",{anchor:"middle",size:52,weight:700,color:"var(--s-control)"});
+  after(300, token, function(){ g1.style.transition="opacity .55s"; g1.style.opacity=1; });
+
+  const g2 = E("g",{opacity:0}, svg);
+  card(g2,720,220,420,240,{stroke:"var(--s-line)"});
+  label(g2,930,270,"HIGH SEVERITY",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+  label(g2,930,300,"RANDOM",{anchor:"middle",size:15,weight:700,color:"var(--s-ink-dim)"});
+  mono(g2,930,390,"4.8%",{anchor:"middle",size:52,weight:700,color:"var(--s-ink-dim)"});
+  after(1000, token, function(){ g2.style.transition="opacity .55s"; g2.style.opacity=1; });
+
+  after(2200, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,640,540,"≈ 9× more detectable",{anchor:"middle",size:30,weight:700,color:"var(--s-anomaly)"});
+    label(t,640,580,"at the identical edit budget — no threshold tuning needed",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(3400, token, function(){
+    const note = E("g",{opacity:0}, svg);
+    label(note,640,640,"not a claim of clinical realism — a claim of model-relevant structure",{anchor:"middle",size:12.5,weight:600,color:"var(--s-asd)"});
+    note.style.transition="opacity .5s"; note.style.opacity=1;
+  });
+});
+
+scene("Phase 2","7,200 Generated Records, Validated at Scale",
+"This generation process ran across 60 base subjects, 20 seed ROIs, three severities, two methods — producing 7,200 generated anomaly records in total. Every one of them was checked against the validity constraints from before. Zero constraint violations, across all 7,200. And diversity: the mean pairwise Jaccard distance between different generated anomalies' touched-edge sets was 0.999 to 1.000 — the generator essentially never produces near-duplicate anomalies.",
+function(svg, html, token){
+  const pg = populationGrid(svg, 60, 80, 1160, 300, 480, {cols:32});
+  pg.reveal(token, 3, 0);
+  after(1600, token, function(){ pg.colorGroup(token, 0, pg.dots.map(function(_,i){return i;}), "var(--s-anomaly)"); });
+  after(2200, token, function(){
+    mono(svg, 640, 430, "7,200 generated anomaly records", {anchor:"middle", size:22, weight:700, color:"var(--s-anomaly)"});
+  });
+  after(3000, token, function(){
+    const cl = checklist(svg, 300, 480, ["0 constraint violations across all 7,200 records"], {});
+    cl.reveal(token, 0, 0);
+    mono(svg, 300+30, 480+70, "diversity: mean pairwise Jaccard ≈ 0.999 – 1.000", {size:14, color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Phase 2","The One Sobering Number",
+"Here is what Phase 2 does not solve. Real ASD test transitions are detected at essentially the same rate as real normal transitions — 4.9% versus 5.0%. Consistent with Phase 1's near-chance AUROC. A severe synthetic anomaly is, in this sense, easier to catch than an actual clinical difference. Real clinical signal is far subtler than even a deliberately severe synthetic perturbation. This is exactly the open question Phase 3 was built to investigate.",
+function(svg, html, token){
+  const bc = barChart(svg, 300, 160, 680, 260, [
+    {label:"REAL NORMAL (val-control)", v:0.050, color:"var(--s-control)"},
+    {label:"REAL ASD (test)", v:0.049, color:"var(--s-asd)"}
+  ], {max:0.08});
+  bc.reveal(token, 400, 300);
+  after(1800, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,470,"nearly identical — the baseline detector cannot tell them apart",{anchor:"middle",size:15,weight:600,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(2600, token, function(){
+    const t2 = E("g",{opacity:0}, svg);
+    label(t2,640,540,"synthetic severe anomaly → easily detectable",{anchor:"middle",size:14,color:"var(--s-control)"});
+    label(t2,640,566,"real ASD transition → far subtler",{anchor:"middle",size:14,color:"var(--s-asd)"});
+    t2.style.transition="opacity .5s"; t2.style.opacity=1;
+  });
+  after(3400, token, function(){
+    mono(svg,640,620,"this is exactly what Phase 3 investigates next", {anchor:"middle", size:13.5, weight:600, color:"var(--s-anomaly)"});
+  });
+});
+
+/* ACT 5 — PHASE 3 */
+scene("Phase 3","Few-Shot: When Only a Handful of Real Examples Exist",
+"Phase 3 is the payoff experiment. In practice, real labeled ASD examples for a specific task like this are scarce. So the question becomes: with only 1, or 5, or 10 real ASD support subjects, can adding Phase 2's generated anomalies actually make a detector more useful?",
+function(svg, html, token){
+  [1,5,10].forEach(function(k,i){
+    const x = 200+i*340;
+    const g = E("g",{opacity:0}, svg);
+    card(g,x,220,260,220,{stroke:"var(--s-asd)"});
+    mono(g,x+130,320,String(k),{anchor:"middle",size:56,weight:700,color:"var(--s-asd)"});
+    label(g,x+130,380,k===1?"real ASD example":"real ASD examples",{anchor:"middle",size:14,color:"var(--s-ink-dim)"});
+    after(i*700, token, function(){ g.style.transition="opacity .5s"; g.style.opacity=1; });
+  });
+  after(2600, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,540,"+ generated anomalies from Phase 2, added to expand the support set",{anchor:"middle",size:15,weight:600,color:"var(--s-anomaly)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 3","Bug: A One-Number Feature Can't Change Its Own Ranking",
+"The first version scored every subject with Phase 1's single scalar — the worst error across everything. But a logistic regression fit on one number is a strictly monotonic function of that number: no matter how it's trained, it can only ever rank subjects in the same order as the raw score itself. Result: AUROC and AUPRC came out bit-for-bit identical across every condition. The fix: a 20-dimensional feature, one score per seed ROI — now the classifier's learned weights can actually change with the training data.",
+function(svg, html, token){
+  const g1 = E("g",{opacity:0}, svg);
+  card(g1,140,180,440,220,{stroke:"var(--s-bad)"});
+  label(g1,360,240,"ONE SCALAR FEATURE",{anchor:"middle",size:17,weight:700,color:"var(--s-bad)"});
+  label(g1,360,290,"strictly monotonic ranking",{anchor:"middle",size:14});
+  label(g1,360,320,"→ classifier training can't",{anchor:"middle",size:14});
+  label(g1,360,346,"change subject ORDER at all",{anchor:"middle",size:14});
+  after(300, token, function(){ g1.style.transition="opacity .5s"; g1.style.opacity=1; });
+  after(1400, token, function(){
+    mono(svg,360,420,"AUROC / AUPRC identical across A, B, C",{anchor:"middle",size:13,color:"var(--s-bad)"});
+  });
+
+  after(2200, token, function(){
+    const g2 = E("g",{opacity:0}, svg);
+    card(g2,700,180,440,260,{stroke:"var(--s-good)"});
+    label(g2,920,230,"20-DIMENSIONAL FEATURE",{anchor:"middle",size:17,weight:700,color:"var(--s-good)"});
+    const vb = vectorBox(g2, 760, 260, 20, 15, 30, 88, {});
+    vb.reveal(token, 0, 20);
+    label(g2,920,340,"one score per seed ROI",{anchor:"middle",size:13.5});
+    label(g2,920,368,"learned weights CAN change",{anchor:"middle",size:13.5,color:"var(--s-good)"});
+    label(g2,920,392,"with the training data",{anchor:"middle",size:13.5,color:"var(--s-good)"});
+    g2.style.transition="opacity .5s"; g2.style.opacity=1;
+  });
+});
+
+scene("Phase 3","Three Conditions, Identical Test Set",
+"Three conditions are compared, all on the exact same 131 held-out test subjects, for the exact same support-set draw. Condition A: few-shot only — k real ASD subjects against all 328 train-control negatives. Condition B: A's positives, plus 30 structure-aware generated anomalies at high severity. Condition C: A's positives, plus 30 random-perturbation generated anomalies — the ablation. Each is repeated for k equals 1, 5, and 10, with five independent draws per shot count.",
+function(svg, html, token){
+  const conds = [
+    {t:"A — FEW-SHOT ONLY", d:["k real ASD support", "vs. 328 train-control"], color:"var(--s-asd)"},
+    {t:"B — + STRUCTURE-AWARE", d:["A's positives +", "30 structure-aware anomalies"], color:"var(--s-control)"},
+    {t:"C — + RANDOM (ablation)", d:["A's positives +", "30 random anomalies"], color:"var(--s-ink-dim)"}
+  ];
+  conds.forEach(function(c,i){
+    const x = 100+i*380;
+    const g = E("g",{opacity:0}, svg);
+    card(g,x,150,340,200,{stroke:c.color});
+    label(g,x+170,200,c.t,{anchor:"middle",size:15.5,weight:700,color:c.color});
+    c.d.forEach(function(l,li){ label(g,x+170,240+li*28,l,{anchor:"middle",size:13}); });
+    after(i*500, token, function(){ g.style.transition="opacity .5s"; g.style.opacity=1; });
+  });
+  after(2000, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    mono(t,640,430,"k ∈ {1, 5, 10}     ×     5 independent support-set draws",{anchor:"middle",size:16,weight:600});
+    label(t,640,460,"same held-out test set (131 subjects), every time",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+  after(2900, token, function(){
+    label(svg,640,540,"45 classifiers fit and evaluated in total",{anchor:"middle",size:14,weight:600,color:"var(--s-anomaly)"});
+  });
+});
+
+scene("Phase 3","1-Shot: From Collapse to Usable",
+"Look at the 1-shot condition first — the hardest setting, one real ASD example. Few-shot-only nearly collapses: F1 of 0.006. A single positive example gives logistic regression almost nothing to calibrate a decision boundary from. Add 30 generated anomalies of either kind, and F1 jumps to roughly 0.39 to 0.40 — recall goes from 0.003, essentially never finding a real ASD subject, to about 0.35, finding around one in three. This is a real, reproducible effect, with tight error bars across five trials.",
+function(svg, html, token){
+  const bc = barChart(svg, 200, 150, 900, 300, [
+    {label:"few-shot only", v:0.006, color:"var(--s-bad)"},
+    {label:"+ structure-aware", v:0.387, color:"var(--s-control)"},
+    {label:"+ random", v:0.403, color:"var(--s-ink-dim)"}
+  ], {max:0.5});
+  label(svg, 640, 110, "1-SHOT — F1 SCORE", {anchor:"middle", size:16, weight:700});
+  bc.reveal(token, 500, 500);
+  after(2500, token, function(){
+    mono(svg, 640, 500, "F1: 0.006  →  0.39–0.40     recall: 0.003  →  ≈0.35", {anchor:"middle", size:15, weight:600, color:"var(--s-anomaly)"});
+  });
+  after(3300, token, function(){
+    label(svg,640,560,"a real, reproducible effect — tight error bars across 5 independent trials",{anchor:"middle",size:13,color:"var(--s-ink-dim)"});
+  });
+});
+
+scene("Phase 3","5-Shot and 10-Shot: The Pattern Holds",
+"The same pattern shows up at 5-shot and 10-shot, smaller in magnitude because few-shot-only already has more to work with. At 5-shot, F1 rises from 0.149 to roughly 0.39–0.40. At 10-shot, from 0.311 to roughly 0.40–0.43. In every case, adding generated data — either kind — helps.",
+function(svg, html, token){
+  const bc1 = barChart(svg, 120, 160, 480, 260, [
+    {label:"only", v:0.149, color:"var(--s-bad)"}, {label:"+struct", v:0.390, color:"var(--s-control)"}, {label:"+rand", v:0.399, color:"var(--s-ink-dim)"}
+  ], {max:0.5});
+  label(svg, 360, 120, "5-SHOT F1", {anchor:"middle", size:15, weight:700});
+  bc1.reveal(token, 300, 260);
+
+  const bc2 = barChart(svg, 700, 160, 480, 260, [
+    {label:"only", v:0.311, color:"var(--s-bad)"}, {label:"+struct", v:0.402, color:"var(--s-control)"}, {label:"+rand", v:0.431, color:"var(--s-ink-dim)"}
+  ], {max:0.5});
+  label(svg, 940, 120, "10-SHOT F1", {anchor:"middle", size:15, weight:700});
+  bc2.reveal(token, 1600, 260);
+
+  after(3400, token, function(){
+    label(svg,640,560,"every shot count, both generation methods — F1 goes up",{anchor:"middle",size:14.5,weight:600,color:"var(--s-anomaly)"});
+  });
+});
+
+scene("Phase 3","But AUROC and AUPRC Stay Near Chance",
+"Now the nuance that matters most. Across every single condition and every shot count, AUROC and AUPRC stay between 0.48 and 0.53 — near chance. The F1 gain came from giving the classifier a usable decision boundary, not from making the underlying feature space more separable. And structure-aware generation does not show a clear edge over random generation in these ranking metrics — even though Phase 2's own raw detectability check showed a clear nine-times advantage.",
+function(svg, html, token){
+  const x0=180,x1=1100,y0=380,y1=150;
+  E("line",{x1:x0,y1:y0,x2:x1,y2:y0,style:"stroke:var(--s-line);stroke-width:1"},svg);
+  E("line",{x1:x0,y1:y0,x2:x0,y2:y1,style:"stroke:var(--s-line);stroke-width:1"},svg);
+  const chanceY = y0-((0.5-0.4)/(0.6-0.4))*(y0-y1);
+  E("line",{x1:x0,y1:chanceY,x2:x1,y2:chanceY, style:"stroke:var(--s-ink-dim);stroke-dasharray:5,4;stroke-width:1.5"},svg);
+  label(svg,x1+10,chanceY+4,"chance = 0.5",{size:11.5,color:"var(--s-ink-dim)"});
+  const series = [
+    {name:"few-shot only", color:"var(--s-bad)", pts:[0.516,0.485,0.524]},
+    {name:"+ structure-aware", color:"var(--s-control)", pts:[0.497,0.486,0.501]},
+    {name:"+ random", color:"var(--s-ink-dim)", pts:[0.506,0.502,0.515]}
+  ];
+  series.forEach(function(s,si){
+    let d="";
+    s.pts.forEach(function(v,i){
+      const x = x0+(x1-x0)*i/2; const y = y0-((v-0.4)/(0.6-0.4))*(y0-y1);
+      d += (i===0?"M":"L")+x+","+y+" ";
+    });
+    const path = E("path",{d:d, style:"fill:none;stroke:"+s.color+";stroke-width:2.5"},svg);
+    const len=600; path.style.strokeDasharray=len; path.style.strokeDashoffset=len;
+    after(600+si*500, token, function(){ path.style.transition="stroke-dashoffset 1s ease"; path.style.strokeDashoffset=0; });
+    label(svg, x1+10, y0-((s.pts[2]-0.4)/(0.6-0.4))*(y0-y1)+ (si*16-16), s.name, {size:11.5, color:s.color});
+  });
+  ["1-shot","5-shot","10-shot"].forEach(function(l,i){ label(svg, x0+(x1-x0)*i/2, y0+22, l, {anchor:"middle", size:12, color:"var(--s-ink-dim)"}); });
+  after(2600, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    label(t,640,470,"AUROC / AUPRC: 0.48–0.53 in EVERY condition",{anchor:"middle",size:16,weight:700,color:"var(--s-asd)"});
+    label(t,640,500,"structure-aware does not clearly beat random here —",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    label(t,640,524,"despite its 9× edge in Phase 2's raw detectability check",{anchor:"middle",size:13.5,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .5s"; t.style.opacity=1;
+  });
+});
+
+scene("Phase 3","What the Results Actually Mean",
+"Put together honestly: Phase 1 learns normal dynamics and gives a near-chance baseline on real ASD separation. Phase 2 generates model-relevant synthetic anomalies with strong, controllable, nine-times detectability over random. Phase 3 shows that adding generated data substantially improves F1 and recall in the data-starved few-shot setting — but AUROC and AUPRC remain near chance, and structure-aware does not yet show a clear edge over random in this classifier. The project demonstrates a promising anomaly-generation mechanism. It does not establish that synthetic anomalies improve the underlying separability of real ASD from control.",
+function(svg, html, token){
+  pipelineFlow(svg, [
+    {t:"PHASE 1", sub:"learn normal dynamics → near-chance real-ASD separation", highlight:false},
+    {t:"PHASE 2", sub:"generate model-relevant anomalies → 9× over random", highlight:false},
+    {t:"PHASE 3", sub:"F1/Recall improve substantially — AUROC/AUPRC stay near chance", highlight:true},
+  ], {x:170, y:110, w:940, h:96, gap:26, delay:750}, token);
+  after(2900, token, function(){
+    const t = E("g",{opacity:0}, svg);
+    card(t,140,470,1000,150,{stroke:"var(--s-asd)", fill:"var(--s-panel)"});
+    label(t,640,510,"a promising anomaly-generation mechanism —",{anchor:"middle",size:15,weight:600});
+    label(t,640,536,"not evidence that it improves real ASD vs. control separability",{anchor:"middle",size:15,weight:600});
+    label(t,640,580,"the honest nuance stays in the record, not hidden behind the F1 number",{anchor:"middle",size:12.5,color:"var(--s-ink-dim)"});
+    t.style.transition="opacity .6s"; t.style.opacity=1;
+  });
+});
+
+/* FINALE */
+scene("Finale","The Complete Pipeline",
+"Start to finish. ABIDE the First: 871 subjects. 360 ROI time series. 30-TR sliding windows. Signed Pearson functional connectivity. Top-20% sparse weighted graphs. 20 stable local subgraphs. A weighted GIN, producing 128-dimensional embeddings. A GRU, learning normal temporal prediction. A Phase 1 anomaly score. Phase 2's gradient-guided anomaly generation, producing 7,200 validated synthetic anomalies. And Phase 3's few-shot evaluation, testing whether any of it actually helps.",
+function(svg, html, token){
+  const steps = [
+    "ABIDE I — 871 subjects","360 ROI time series","30-TR sliding windows","signed Pearson FC",
+    "top-20% sparse graphs","20 stable subgraphs","weighted GIN → 128-D","GRU → normal prediction",
+    "Phase 1 anomaly score","Phase 2 gradient generation","7,200 validated anomalies","Phase 3 few-shot evaluation"
+  ];
+  const cols=3, rows=4, w=380,h=76,gx=60,gy=90,gapx=30,gapy=22;
+  steps.forEach(function(s,i){
+    const col = i%cols, row = Math.floor(i/cols);
+    const x = gx+col*(w+gapx), y = gy+row*(h+gapy);
+    const g = E("g",{opacity:0}, svg);
+    card(g,x,y,w,h,{});
+    label(g,x+w/2,y+h/2+5,s,{anchor:"middle",size:14.5,weight:600});
+    mono(g,x+20,y+18,String(i+1).padStart(2,"0"),{size:10.5,color:"var(--s-ink-dim)"});
+    after(220*i, token, function(){ g.style.transition="opacity .4s"; g.style.opacity=1; });
+  });
+});
+
+scene("Finale","The Central Idea",
+"Learn what normal brain-subgraph dynamics look like. Use that learned structure to create controlled, meaningful deviations. Then test whether those generated examples can help when real abnormal data are scarce. That is GRAPH_ANOMALY — in one sentence.",
+function(svg, html, token){
+  brainOutline(svg, 300, 340, 150, {stroke:"var(--s-accent)", sw:2});
+  const rnd = seeded(200);
+  for(let i=0;i<24;i++){
+    const a=rnd()*Math.PI*2, rr=60+rnd()*90;
+    const c = E("circle",{cx:300+Math.cos(a)*rr, cy:340+Math.sin(a)*rr*0.85, r:3, style:"fill:var(--s-control);opacity:0"}, svg);
+    after(i*30,token,function(){ c.style.transition="opacity .3s"; c.style.opacity=.9; });
+  }
+  const lines = [
+    "Learn what normal brain-subgraph dynamics look like.",
+    "Use that structure to create controlled, meaningful deviations.",
+    "Test whether those examples help when real data are scarce."
+  ];
+  lines.forEach(function(l,i){
+    const g = E("g",{opacity:0}, svg);
+    label(g,700,240+i*70,l,{size:19,weight:600});
+    after(600+i*900, token, function(){ g.style.transition="opacity .5s"; g.style.opacity=1; });
+  });
+  after(3600, token, function(){
+    const q = E("g",{opacity:0}, svg);
+    card(q,660,520,540,110,{stroke:"var(--s-asd)"});
+    label(q,930,558,"synthetic anomalies are a methodological tool —",{anchor:"middle",size:13.5,weight:600});
+    label(q,930,584,"not clinically validated ASD biomarkers",{anchor:"middle",size:13.5,weight:600,color:"var(--s-asd)"});
+    q.style.transition="opacity .6s"; q.style.opacity=1;
+  });
+});
+
+/* ---------------- player engine ---------------- */
+let idx = 0;
+let playing = false;
+let utter = null;
+let fallbackTimer = null;
+let muted = false;
+
+const sidebar = document.getElementById("sidebar");
+const scrubFill = document.getElementById("scrubFill");
+const scrubTicks = document.getElementById("scrubTicks");
+const scrubTrack = document.getElementById("scrubTrack");
+const sceneCounter = document.getElementById("sceneCounter");
+const playIcon = document.getElementById("playIcon");
+const startOverlay = document.getElementById("startOverlay");
+
+function buildSidebar(){
+  sidebar.innerHTML = "";
+  let curAct = null; let group=null;
+  S.forEach(function(sc, i){
+    if(sc.act !== curAct){
+      curAct = sc.act;
+      group = document.createElement("div"); group.className="actGroup";
+      const h = document.createElement("div"); h.className="actName"; h.textContent = curAct;
+      group.appendChild(h);
+      sidebar.appendChild(group);
+    }
+    const b = document.createElement("button");
+    b.innerHTML = '<span class="n">'+String(i+1).padStart(2,"0")+'</span>'+sc.title;
+    b.dataset.i = i;
+    b.onclick = function(){ goTo(i, true); };
+    group.appendChild(b);
+  });
+  for(let i=0;i<S.length;i++){ const t=document.createElement("i"); scrubTicks.appendChild(t); }
+}
+
+function updateChrome(){
+  document.querySelectorAll("#sidebar button").forEach(function(b){ b.classList.toggle("active", +b.dataset.i===idx); });
+  const active = document.querySelector('#sidebar button.active');
+  if(active) active.scrollIntoView({block:"nearest"});
+  scrubFill.style.width = (idx/(S.length-1)*100)+"%";
+  sceneCounter.textContent = (idx+1)+" / "+S.length;
+  actTagEl.textContent = S[idx].act.toUpperCase();
+  sceneTitleEl.textContent = S[idx].title;
+  const cap = capbar.querySelector("p") || document.createElement("p");
+  cap.className = "";
+  cap.textContent = S[idx].narr;
+  capbar.innerHTML = ""; capbar.appendChild(cap);
+}
+
+function stopSpeech(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(fallbackTimer){ clearTimeout(fallbackTimer); fallbackTimer=null; }
+}
+
+function renderScene(i){
+  currentToken++;
+  const token = currentToken;
+  startOverlay.style.display = "none";
+  svgLayer.innerHTML = "";
+  htmlLayer.innerHTML = "";
+  actTagEl.style.display = "block";
+  sceneTitleEl.style.display = "block";
+  updateChrome();
+  S[i].build(svgLayer, htmlLayer, token);
+  return token;
+}
+
+function speakAndAdvance(i){
+  stopSpeech();
+  const text = S[i].narr;
+  const estMs = Math.max(4200, text.split(/\s+/).length / 2.35 * 1000 + 900);
+  if(window.speechSynthesis && !muted){
+    utter = new SpeechSynthesisUtterance(text);
+    const v = pickVoice(); if(v) utter.voice = v;
+    utter.rate = 0.98; utter.pitch = 1.0;
+    utter.onend = function(){ if(playing) advance(); };
+    utter.onerror = function(){ if(playing) advance(); };
+    window.speechSynthesis.speak(utter);
+    fallbackTimer = setTimeout(function(){ if(playing) advance(); }, estMs + 6000);
+  } else {
+    fallbackTimer = setTimeout(function(){ if(playing) advance(); }, estMs);
+  }
+}
+
+function goTo(i, userInitiated){
+  idx = Math.max(0, Math.min(S.length-1, i));
+  renderScene(idx);
+  if(playing) speakAndAdvance(idx);
+}
+function advance(){
+  if(idx >= S.length-1){ pause(); return; }
+  idx++;
+  renderScene(idx);
+  speakAndAdvance(idx);
+}
+function play(){
+  playing = true;
+  playIcon.innerHTML = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+  startOverlay.style.display = "none";
+  renderScene(idx);
+  speakAndAdvance(idx);
+}
+function pause(){
+  playing = false;
+  playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  stopSpeech();
+}
+
+document.getElementById("startBtn").onclick = function(){ play(); };
+document.getElementById("playBtn").onclick = function(){ if(playing) pause(); else play(); };
+document.getElementById("prevBtn").onclick = function(){ pause(); goTo(idx-1); };
+document.getElementById("nextBtn").onclick = function(){ pause(); goTo(idx+1); };
+document.getElementById("muteBtn").onclick = function(){
+  muted = !muted;
+  document.getElementById("muteIcon").innerHTML = muted
+    ? '<path d="M16.5 12A4.5 4.5 0 0014 8v1.2l2.4 2.4c.06-.2.1-.4.1-.6zM19 12c0 .94-.2 1.82-.54 2.63l1.51 1.51A8.9 8.9 0 0021 12c0-4.28-3-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>'
+    : '<path d="M3 10v4h4l5 5V5L7 10H3z"/>';
+  if(muted) stopSpeech();
+};
+scrubTrack.onclick = function(e){
+  const r = scrubTrack.getBoundingClientRect();
+  const frac = (e.clientX-r.left)/r.width;
+  pause(); goTo(Math.round(frac*(S.length-1)));
+};
+document.addEventListener("keydown", function(e){
+  if(e.key==="ArrowRight"){ pause(); goTo(idx+1); }
+  if(e.key==="ArrowLeft"){ pause(); goTo(idx-1); }
+  if(e.key===" "){ e.preventDefault(); if(playing) pause(); else play(); }
+});
+
+buildSidebar();
+renderScene(0);
+fit();
+window.addEventListener("load", fit);
+})();
+</script>
+
+</body></html>

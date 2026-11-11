@@ -1,0 +1,521 @@
+{
+ "brahim2020": {
+  "year": null,
+  "title": "Graph Fourier transform of fMRI temporal signals based on an averaged structural connectome for the classification of neuroimaging",
+  "doi": "10.1016/j.artmed.2020.101870",
+  "arxiv": null,
+  "crossref_title": "Graph Fourier transform of fMRI temporal signals based on an averaged structural connectome for the classification of neuroimaging",
+  "title_similarity": 1.0,
+  "crossref_year": 2020,
+  "status": "OK"
+ },
+ "gotham2009": {
+  "year": null,
+  "title": "Standardizing ADOS scores for a measure of severity in autism spectrum disorders",
+  "doi": "10.1007/s10803-008-0674-3",
+  "arxiv": null,
+  "crossref_title": "Standardizing ADOS Scores for a Measure of Severity in Autism Spectrum Disorders",
+  "title_similarity": 1.0,
+  "crossref_year": 2008,
+  "status": "OK"
+ },
+ "abraham2014": {
+  "year": null,
+  "title": "Machine learning for neuroimaging with scikit-learn",
+  "doi": "10.3389/fninf.2014.00014",
+  "arxiv": null,
+  "crossref_title": "Machine learning for neuroimaging with scikit-learn",
+  "title_similarity": 1.0,
+  "crossref_year": 2014,
+  "status": "OK"
+ },
+ "dimartino2014": {
+  "year": null,
+  "title": "The autism brain imaging data exchange: Towards a large-scale evaluation of the intrinsic brain architecture in autism",
+  "doi": "10.1038/mp.2013.78",
+  "arxiv": null,
+  "crossref_title": "The autism brain imaging data exchange: towards a large-scale evaluation of the intrinsic brain architecture in autism",
+  "title_similarity": 1.0,
+  "crossref_year": 2013,
+  "status": "OK"
+ },
+ "parisot2018": {
+  "year": null,
+  "title": "Disease prediction using graph convolutional networks: Application to autism spectrum disorder and Alzheimer's disease",
+  "doi": "10.1016/j.media.2018.06.001",
+  "arxiv": null,
+  "crossref_title": "Disease prediction using graph convolutional networks: Application to Autism Spectrum Disorder and Alzheimer\u2019s disease",
+  "title_similarity": 0.99,
+  "crossref_year": 2018,
+  "status": "OK"
+ },
+ "bullmore2009": {
+  "year": null,
+  "title": "Complex brain networks: Graph theoretical analysis of structural and functional systems",
+  "doi": "10.1038/nrn2575",
+  "arxiv": null,
+  "crossref_title": "Complex brain networks: graph theoretical analysis of structural and functional systems",
+  "title_similarity": 1.0,
+  "crossref_year": 2009,
+  "status": "OK"
+ },
+ "smith2011": {
+  "year": null,
+  "title": "Network modelling methods for FMRI",
+  "doi": "10.1016/j.neuroimage.2010.08.063",
+  "arxiv": null,
+  "crossref_title": "Network modelling methods for FMRI",
+  "title_similarity": 1.0,
+  "crossref_year": 2011,
+  "status": "OK"
+ },
+ "ktena2017": {
+  "year": null,
+  "title": "Distance metric learning using graph convolutional networks: Application to functional brain networks",
+  "doi": "10.1007/978-3-319-66182-7_54",
+  "arxiv": null,
+  "crossref_title": "Distance Metric Learning Using Graph Convolutional Networks: Application to\u00a0Functional Brain Networks",
+  "title_similarity": 0.99,
+  "crossref_year": 2017,
+  "status": "OK"
+ },
+ "li2021braingnn": {
+  "year": null,
+  "title": "BrainGNN: Interpretable brain graph neural network for fMRI analysis",
+  "doi": "10.1016/j.media.2021.102233",
+  "arxiv": null,
+  "crossref_title": "BrainGNN: Interpretable Brain Graph Neural Network for fMRI Analysis",
+  "title_similarity": 1.0,
+  "crossref_year": 2021,
+  "status": "OK"
+ },
+ "xu2019gin": {
+  "year": null,
+  "title": "How powerful are graph neural networks",
+  "doi": null,
+  "arxiv": "1810.00826",
+  "status": "ARXIV-ONLY"
+ },
+ "hutchison2013": {
+  "year": null,
+  "title": "Dynamic functional connectivity: Promise, issues, and interpretations",
+  "doi": "10.1016/j.neuroimage.2013.05.079",
+  "arxiv": null,
+  "crossref_title": "Dynamic functional connectivity: Promise, issues, and interpretations",
+  "title_similarity": 1.0,
+  "crossref_year": 2013,
+  "status": "OK"
+ },
+ "cho2014": {
+  "year": null,
+  "title": "Learning phrase representations using RNN encoder-decoder for statistical machine translation",
+  "doi": "10.3115/v1/D14-1179",
+  "arxiv": null,
+  "crossref_title": "Learning Phrase Representations using RNN Encoder\u2013Decoder for Statistical Machine Translation",
+  "title_similarity": 0.99,
+  "crossref_year": 2014,
+  "status": "OK"
+ },
+ "rossi2020tgn": {
+  "year": "2020",
+  "title": "Temporal graph networks for deep learning on dynamic graphs",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "pareja2020": {
+  "year": null,
+  "title": "EvolveGCN: Evolving graph convolutional networks for dynamic graphs",
+  "doi": "10.1609/aaai.v34i04.5984",
+  "arxiv": null,
+  "crossref_title": "EvolveGCN: Evolving Graph Convolutional Networks for Dynamic Graphs",
+  "title_similarity": 1.0,
+  "crossref_year": 2020,
+  "status": "OK"
+ },
+ "ma2023survey": {
+  "year": null,
+  "title": "A comprehensive survey on graph anomaly detection with deep learning",
+  "doi": "10.1109/TKDE.2021.3118815",
+  "arxiv": null,
+  "crossref_title": "A Comprehensive Survey on Graph Anomaly Detection With Deep Learning",
+  "title_similarity": 1.0,
+  "crossref_year": 2023,
+  "status": "OK"
+ },
+ "ding2019dominant": {
+  "year": null,
+  "title": "Deep anomaly detection on attributed networks",
+  "doi": "10.1137/1.9781611975673.67",
+  "arxiv": null,
+  "crossref_title": "Deep Anomaly Detection on Attributed Networks",
+  "title_similarity": 1.0,
+  "crossref_year": 2019,
+  "status": "OK"
+ },
+ "ding2021fewshot": {
+  "year": null,
+  "title": "Few-shot network anomaly detection via cross-network meta-learning",
+  "doi": "10.1145/3442381.3449922",
+  "arxiv": null,
+  "crossref_title": "Few-shot Network Anomaly Detection via Cross-network Meta-learning",
+  "title_similarity": 1.0,
+  "crossref_year": 2021,
+  "status": "OK"
+ },
+ "zugner2018": {
+  "year": null,
+  "title": "Adversarial attacks on neural networks for graph data",
+  "doi": "10.1145/3219819.3220078",
+  "arxiv": null,
+  "crossref_title": "Adversarial Attacks on Neural Networks for Graph Data",
+  "title_similarity": 1.0,
+  "crossref_year": 2018,
+  "status": "OK"
+ },
+ "dai2018": {
+  "year": null,
+  "title": "Adversarial attack on graph structured data",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "xu2019topology": {
+  "year": null,
+  "title": "Topology attack and defense for graph neural networks: An optimization perspective",
+  "doi": "10.24963/ijcai.2019/550",
+  "arxiv": null,
+  "crossref_title": "Topology Attack and Defense for Graph Neural Networks: An Optimization Perspective",
+  "title_similarity": 1.0,
+  "crossref_year": 2019,
+  "status": "OK"
+ },
+ "madry2018": {
+  "year": null,
+  "title": "Towards deep learning models resistant to adversarial attacks",
+  "doi": null,
+  "arxiv": "1706.06083",
+  "status": "ARXIV-ONLY"
+ },
+ "zhao2021smote": {
+  "year": null,
+  "title": "GraphSMOTE: Imbalanced node classification on graphs with graph neural networks",
+  "doi": "10.1145/3437963.3441720",
+  "arxiv": null,
+  "crossref_title": "GraphSMOTE: Imbalanced Node Classification on Graphs with Graph Neural Networks",
+  "title_similarity": 1.0,
+  "crossref_year": 2021,
+  "status": "OK"
+ },
+ "chen2020gaan": {
+  "year": "2070",
+  "title": "Generative adversarial attributed network anomaly detection",
+  "doi": "10.1145/3340531.3412070",
+  "arxiv": null,
+  "crossref_title": "Generative Adversarial Attributed Network Anomaly Detection",
+  "title_similarity": 1.0,
+  "crossref_year": 2020,
+  "status": "OK"
+ },
+ "allen2014": {
+  "year": null,
+  "title": "Tracking whole-brain connectivity dynamics in the resting state",
+  "doi": "10.1093/cercor/bhs352",
+  "arxiv": null,
+  "crossref_title": "Tracking Whole-Brain Connectivity Dynamics in the Resting State",
+  "title_similarity": 1.0,
+  "crossref_year": 2012,
+  "status": "OK"
+ },
+ "preti2017": {
+  "year": null,
+  "title": "The dynamic functional connectome: State-of-the-art and perspectives",
+  "doi": "10.1016/j.neuroimage.2016.12.061",
+  "arxiv": null,
+  "crossref_title": "The dynamic functional connectome: State-of-the-art and perspectives",
+  "title_similarity": 1.0,
+  "crossref_year": 2017,
+  "status": "OK"
+ },
+ "abraham2017": {
+  "year": null,
+  "title": "Deriving reproducible biomarkers from multi-site resting-state data: An autism-based example",
+  "doi": "10.1016/j.neuroimage.2016.10.045",
+  "arxiv": null,
+  "crossref_title": "Deriving reproducible biomarkers from multi-site resting-state data: An Autism-based example",
+  "title_similarity": 1.0,
+  "crossref_year": 2017,
+  "status": "OK"
+ },
+ "heinsfeld2018": {
+  "year": null,
+  "title": "Identification of autism spectrum disorder using deep learning and the ABIDE dataset",
+  "doi": "10.1016/j.nicl.2017.08.017",
+  "arxiv": null,
+  "crossref_title": "Identification of autism spectrum disorder using deep learning and the ABIDE dataset",
+  "title_similarity": 1.0,
+  "crossref_year": 2018,
+  "status": "OK"
+ },
+ "kawahara2017": {
+  "year": null,
+  "title": "BrainNetCNN: Convolutional neural networks for brain networks; towards predicting neurodevelopment",
+  "doi": "10.1016/j.neuroimage.2016.09.046",
+  "arxiv": null,
+  "crossref_title": "BrainNetCNN: Convolutional neural networks for brain networks; towards predicting neurodevelopment",
+  "title_similarity": 1.0,
+  "crossref_year": 2017,
+  "status": "OK"
+ },
+ "kan2022": {
+  "year": "2022",
+  "title": "Brain network transformer",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "cui2023": {
+  "year": null,
+  "title": "BrainGB: A benchmark for brain network analysis with graph neural networks",
+  "doi": "10.1109/TMI.2022.3218745",
+  "arxiv": null,
+  "crossref_title": "BrainGB: A Benchmark for Brain Network Analysis With Graph Neural Networks",
+  "title_similarity": 1.0,
+  "crossref_year": 2023,
+  "status": "OK"
+ },
+ "ruff2018": {
+  "year": null,
+  "title": "Deep one-class classification",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "pang2021review": {
+  "year": null,
+  "title": "Deep learning for anomaly detection: A review",
+  "doi": "10.1145/3439950",
+  "arxiv": null,
+  "crossref_title": "Deep Learning for Anomaly Detection",
+  "title_similarity": 0.88,
+  "crossref_year": 2021,
+  "status": "OK"
+ },
+ "yu2018netwalk": {
+  "year": null,
+  "title": "NetWalk: A flexible deep embedding approach for anomaly detection in dynamic networks",
+  "doi": "10.1145/3219819.3220024",
+  "arxiv": null,
+  "crossref_title": "NetWalk",
+  "title_similarity": 0.15,
+  "crossref_year": 2018,
+  "status": "CHECK"
+ },
+ "zheng2019addgraph": {
+  "year": null,
+  "title": "AddGraph: Anomaly detection in dynamic graph using attention-based temporal GCN",
+  "doi": "10.24963/ijcai.2019/614",
+  "arxiv": null,
+  "crossref_title": "AddGraph: Anomaly Detection in Dynamic Graph Using Attention-based Temporal GCN",
+  "title_similarity": 1.0,
+  "crossref_year": 2019,
+  "status": "OK"
+ },
+ "bardes2022": {
+  "year": null,
+  "title": "VICReg: Variance-invariance-covariance regularization for self-supervised learning",
+  "doi": null,
+  "arxiv": "2105.04906",
+  "status": "ARXIV-ONLY"
+ },
+ "kingma2015": {
+  "year": null,
+  "title": "Adam: A method for stochastic optimization",
+  "doi": null,
+  "arxiv": "1412.6980",
+  "status": "ARXIV-ONLY"
+ },
+ "finn2017": {
+  "year": null,
+  "title": "Model-agnostic meta-learning for fast adaptation of deep networks",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "wang2021fewshot": {
+  "year": null,
+  "title": "Generalizing from a few examples: A survey on few-shot learning",
+  "doi": "10.1145/3386252",
+  "arxiv": null,
+  "crossref_title": "Generalizing from a Few Examples",
+  "title_similarity": 0.67,
+  "crossref_year": 2020,
+  "status": "CHECK"
+ },
+ "yu2018harm": {
+  "year": null,
+  "title": "Statistical harmonization corrects site effects in functional connectivity measurements from multi-site fMRI data",
+  "doi": "10.1002/hbm.24241",
+  "arxiv": null,
+  "crossref_title": "Statistical harmonization corrects site effects in functional connectivity measurements from multi\u2010site fMRI data",
+  "title_similarity": 0.99,
+  "crossref_year": 2018,
+  "status": "OK"
+ },
+ "pang2019devnet": {
+  "year": null,
+  "title": "Deep anomaly detection with deviation networks",
+  "doi": "10.1145/3292500.3330871",
+  "arxiv": null,
+  "crossref_title": "Deep Anomaly Detection with Deviation Networks",
+  "title_similarity": 1.0,
+  "crossref_year": 2019,
+  "status": "OK"
+ },
+ "lanciano2020": {
+  "year": null,
+  "title": "Explainable classification of brain networks via contrast subgraphs",
+  "doi": "10.1145/3394486.3403383",
+  "arxiv": null,
+  "crossref_title": "Explainable Classification of Brain Networks via Contrast Subgraphs",
+  "title_similarity": 1.0,
+  "crossref_year": 2020,
+  "status": "OK"
+ },
+ "kim2021": {
+  "year": null,
+  "title": "Learning dynamic graph representation of brain connectome with spatio-temporal attention",
+  "doi": null,
+  "arxiv": "2105.13495",
+  "status": "ARXIV-ONLY"
+ },
+ "gadgil2020": {
+  "year": null,
+  "title": "Spatio-temporal graph convolution for resting-state fMRI analysis",
+  "doi": "10.1007/978-3-030-59728-3_52",
+  "arxiv": null,
+  "crossref_title": "Spatio-Temporal Graph Convolution for Resting-State fMRI Analysis",
+  "title_similarity": 1.0,
+  "crossref_year": 2020,
+  "status": "OK"
+ },
+ "marquand2016": {
+  "year": null,
+  "title": "Understanding heterogeneity in clinical cohorts using normative models: Beyond case-control studies",
+  "doi": "10.1016/j.biopsych.2015.12.023",
+  "arxiv": null,
+  "crossref_title": "Understanding Heterogeneity in Clinical Cohorts Using Normative Models: Beyond Case-Control Studies",
+  "title_similarity": 1.0,
+  "crossref_year": 2016,
+  "status": "OK"
+ },
+ "ma2022glocal": {
+  "year": null,
+  "title": "Deep graph-level anomaly detection by glocal knowledge distillation",
+  "doi": "10.1145/3488560.3498473",
+  "arxiv": null,
+  "crossref_title": "Deep Graph-level Anomaly Detection by Glocal Knowledge Distillation",
+  "title_similarity": 1.0,
+  "crossref_year": 2022,
+  "status": "OK"
+ },
+ "kipf2017": {
+  "year": null,
+  "title": "Semi-supervised classification with graph convolutional networks",
+  "doi": null,
+  "arxiv": "1609.02907",
+  "status": "ARXIV-ONLY"
+ },
+ "snell2017": {
+  "year": null,
+  "title": "Prototypical networks for few-shot learning",
+  "doi": null,
+  "arxiv": "1703.05175",
+  "status": "ARXIV-ONLY"
+ },
+ "glasser2016": {
+  "year": null,
+  "title": "A multi-modal parcellation of human cerebral cortex",
+  "doi": "10.1038/nature18933",
+  "arxiv": null,
+  "crossref_title": "A multi-modal parcellation of human cerebral cortex",
+  "title_similarity": 1.0,
+  "crossref_year": 2016,
+  "status": "OK"
+ },
+ "fey2019": {
+  "year": null,
+  "title": "Fast graph representation learning with PyTorch Geometric",
+  "doi": null,
+  "arxiv": "1903.02428",
+  "status": "ARXIV-ONLY"
+ },
+ "paszke2019": {
+  "year": null,
+  "title": "PyTorch: An imperative style, high-performance deep learning library",
+  "doi": null,
+  "arxiv": "1912.01703",
+  "status": "ARXIV-ONLY"
+ },
+ "sadeghian2024": {
+  "year": "2024",
+  "title": "HyperBrain: Anomaly detection for temporal hypergraph brain networks",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "behrouz2023": {
+  "year": null,
+  "title": "Anomaly detection in human brain via inductive learning on temporal multiplex networks",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "chatterjee2021": {
+  "year": null,
+  "title": "Detecting network anomalies using Forman-Ricci curvature and a case study for human brain networks",
+  "doi": "10.1038/s41598-021-87587-z",
+  "arxiv": null,
+  "crossref_title": "Detecting network anomalies using Forman\u2013Ricci curvature and a case study for human brain networks",
+  "title_similarity": 0.99,
+  "crossref_year": 2021,
+  "status": "OK"
+ },
+ "aggarwal2019": {
+  "year": null,
+  "title": "Multivariate graph learning for detecting aberrant connectivity of dynamic brain networks in autism",
+  "doi": "10.1016/j.media.2019.05.007",
+  "arxiv": null,
+  "crossref_title": "Multivariate graph learning for detecting aberrant connectivity of dynamic brain networks in autism",
+  "title_similarity": 1.0,
+  "crossref_year": 2019,
+  "status": "OK"
+ },
+ "yang2022meta": {
+  "year": null,
+  "title": "Data-efficient brain connectome analysis via multi-task meta-learning",
+  "doi": "10.1145/3534678.3542680",
+  "arxiv": null,
+  "crossref_title": "Data-Efficient Brain Connectome Analysis via Multi-Task Meta-Learning",
+  "title_similarity": 1.0,
+  "crossref_year": 2022,
+  "status": "OK"
+ },
+ "wei2025": {
+  "year": "2025",
+  "title": "A brain graph foundation model: Pre-training and prompt-tuning across broad atlases and disorders",
+  "doi": null,
+  "arxiv": null,
+  "status": "NO-IDENTIFIER"
+ },
+ "dhinagar2023": {
+  "year": null,
+  "title": "Few-shot classification of autism spectrum disorder using site-agnostic meta-learning and brain MRI",
+  "doi": "10.1109/EMBC40787.2023.10340852",
+  "arxiv": null,
+  "crossref_title": "Few-Shot Classification of Autism Spectrum Disorder using Site-Agnostic Meta-Learning and Brain MRI",
+  "title_similarity": 1.0,
+  "crossref_year": 2023,
+  "status": "OK"
+ }
+}

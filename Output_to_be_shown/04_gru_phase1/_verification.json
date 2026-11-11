@@ -1,0 +1,11 @@
+{
+  "subject_control": "UM_1_007",
+  "subject_asd": "UM_1_062",
+  "seed_roi": 284,
+  "tau_transition": 7.4349614620208735,
+  "tau_subject": 19.813226509094232,
+  "max_A_t_control": 8.645342826843262,
+  "max_A_t_asd": 9.798046112060547,
+  "control_flagged_any_transition": true,
+  "asd_flagged_any_transition": true
+}
