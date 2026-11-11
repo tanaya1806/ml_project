@@ -1,0 +1,101 @@
+file,true_group,synthetic_strength,injected_seeds,injected_amplitude,time_points,subject_score,threshold,detector_output,detector_correct,severity_predicted,severity_matches_synthetic_strength
+scan_001.csv,normal_like,,0,0.0,169,15.444,19.813,not flagged,True,,
+scan_002.csv,injected_anomaly,moderate,2,1.5,174,95.503,19.813,flagged,True,low,False
+scan_003.csv,normal_like,,0,0.0,125,14.486,19.813,not flagged,True,,
+scan_004.csv,normal_like,,0,0.0,167,11.969,19.813,not flagged,True,,
+scan_005.csv,injected_anomaly,high,3,2.38,167,137.065,19.813,flagged,True,low,False
+scan_006.csv,normal_like,,0,0.0,186,18.523,19.813,not flagged,True,,
+scan_007.csv,normal_like,,0,0.0,136,11.422,19.813,not flagged,True,,
+scan_008.csv,injected_anomaly,high,2,2.91,187,193.944,19.813,flagged,True,high,True
+scan_009.csv,injected_anomaly,low,1,0.88,134,49.694,19.813,flagged,True,moderate,False
+scan_010.csv,normal_like,,0,0.0,192,16.503,19.813,not flagged,True,,
+scan_011.csv,normal_like,,0,0.0,172,15.739,19.813,not flagged,True,,
+scan_012.csv,normal_like,,0,0.0,153,14.084,19.813,not flagged,True,,
+scan_013.csv,injected_anomaly,moderate,1,1.22,125,42.54,19.813,flagged,True,moderate,True
+scan_014.csv,injected_anomaly,high,3,2.82,184,131.377,19.813,flagged,True,low,False
+scan_015.csv,injected_anomaly,moderate,2,1.97,132,116.768,19.813,flagged,True,moderate,True
+scan_016.csv,injected_anomaly,high,2,2.33,122,89.342,19.813,flagged,True,moderate,False
+scan_017.csv,injected_anomaly,high,3,3.49,174,210.588,19.813,flagged,True,moderate,False
+scan_018.csv,injected_anomaly,moderate,1,1.29,141,91.886,19.813,flagged,True,high,False
+scan_019.csv,injected_anomaly,high,2,3.03,122,210.31,19.813,flagged,True,moderate,False
+scan_020.csv,injected_anomaly,low,1,0.95,137,15.455,19.813,not flagged,False,,
+scan_021.csv,injected_anomaly,moderate,2,1.85,186,105.152,19.813,flagged,True,low,False
+scan_022.csv,normal_like,,0,0.0,189,12.365,19.813,not flagged,True,,
+scan_023.csv,normal_like,,0,0.0,180,15.114,19.813,not flagged,True,,
+scan_024.csv,normal_like,,0,0.0,153,14.535,19.813,not flagged,True,,
+scan_025.csv,injected_anomaly,low,1,0.81,157,27.092,19.813,flagged,True,low,True
+scan_026.csv,normal_like,,0,0.0,136,12.322,19.813,not flagged,True,,
+scan_027.csv,injected_anomaly,high,2,3.42,133,72.37,19.813,flagged,True,low,False
+scan_028.csv,normal_like,,0,0.0,153,12.804,19.813,not flagged,True,,
+scan_029.csv,normal_like,,0,0.0,135,10.475,19.813,not flagged,True,,
+scan_030.csv,injected_anomaly,moderate,1,1.21,177,55.087,19.813,flagged,True,low,False
+scan_031.csv,injected_anomaly,moderate,1,2.0,158,62.023,19.813,flagged,True,moderate,True
+scan_032.csv,normal_like,,0,0.0,152,17.228,19.813,not flagged,True,,
+scan_033.csv,injected_anomaly,low,1,0.71,181,23.888,19.813,flagged,True,low,True
+scan_034.csv,injected_anomaly,moderate,1,1.61,142,298.665,19.813,flagged,True,low,False
+scan_035.csv,injected_anomaly,moderate,2,1.55,177,40.382,19.813,flagged,True,moderate,True
+scan_036.csv,normal_like,,0,0.0,161,11.893,19.813,not flagged,True,,
+scan_037.csv,normal_like,,0,0.0,158,13.671,19.813,not flagged,True,,
+scan_038.csv,normal_like,,0,0.0,126,19.206,19.813,not flagged,True,,
+scan_039.csv,injected_anomaly,low,1,0.8,161,24.921,19.813,flagged,True,high,False
+scan_040.csv,injected_anomaly,low,1,0.94,197,25.581,19.813,flagged,True,moderate,False
+scan_041.csv,injected_anomaly,moderate,1,1.26,141,33.899,19.813,flagged,True,low,False
+scan_042.csv,injected_anomaly,low,1,0.98,188,48.963,19.813,flagged,True,high,False
+scan_043.csv,normal_like,,0,0.0,152,16.046,19.813,not flagged,True,,
+scan_044.csv,normal_like,,0,0.0,197,11.793,19.813,not flagged,True,,
+scan_045.csv,injected_anomaly,moderate,2,1.86,184,158.792,19.813,flagged,True,high,False
+scan_046.csv,normal_like,,0,0.0,195,17.554,19.813,not flagged,True,,
+scan_047.csv,normal_like,,0,0.0,176,12.356,19.813,not flagged,True,,
+scan_048.csv,normal_like,,0,0.0,132,13.968,19.813,not flagged,True,,
+scan_049.csv,normal_like,,0,0.0,191,12.343,19.813,not flagged,True,,
+scan_050.csv,normal_like,,0,0.0,147,10.849,19.813,not flagged,True,,
+scan_051.csv,injected_anomaly,low,1,0.83,198,61.891,19.813,flagged,True,low,True
+scan_052.csv,injected_anomaly,moderate,2,1.28,161,71.64,19.813,flagged,True,high,False
+scan_053.csv,normal_like,,0,0.0,140,14.598,19.813,not flagged,True,,
+scan_054.csv,injected_anomaly,low,1,0.95,184,12.841,19.813,not flagged,False,,
+scan_055.csv,injected_anomaly,moderate,2,1.31,164,34.815,19.813,flagged,True,moderate,True
+scan_056.csv,injected_anomaly,high,3,2.7,173,283.445,19.813,flagged,True,moderate,False
+scan_057.csv,normal_like,,0,0.0,167,11.93,19.813,not flagged,True,,
+scan_058.csv,normal_like,,0,0.0,158,13.882,19.813,not flagged,True,,
+scan_059.csv,injected_anomaly,moderate,2,1.56,148,56.991,19.813,flagged,True,moderate,True
+scan_060.csv,injected_anomaly,moderate,1,1.78,162,34.729,19.813,flagged,True,moderate,True
+scan_061.csv,normal_like,,0,0.0,186,13.742,19.813,not flagged,True,,
+scan_062.csv,normal_like,,0,0.0,127,12.406,19.813,not flagged,True,,
+scan_063.csv,injected_anomaly,low,1,0.97,183,30.464,19.813,flagged,True,high,False
+scan_064.csv,injected_anomaly,high,3,2.65,124,126.016,19.813,flagged,True,low,False
+scan_065.csv,injected_anomaly,low,1,0.91,132,28.608,19.813,flagged,True,moderate,False
+scan_066.csv,normal_like,,0,0.0,162,15.819,19.813,not flagged,True,,
+scan_067.csv,normal_like,,0,0.0,189,15.018,19.813,not flagged,True,,
+scan_068.csv,injected_anomaly,high,3,3.05,153,225.079,19.813,flagged,True,low,False
+scan_069.csv,normal_like,,0,0.0,177,12.206,19.813,not flagged,True,,
+scan_070.csv,injected_anomaly,low,1,0.77,139,22.505,19.813,flagged,True,high,False
+scan_071.csv,injected_anomaly,low,1,1.06,174,30.293,19.813,flagged,True,low,True
+scan_072.csv,injected_anomaly,low,1,0.96,124,25.219,19.813,flagged,True,moderate,False
+scan_073.csv,injected_anomaly,low,1,0.76,156,16.371,19.813,not flagged,False,,
+scan_074.csv,injected_anomaly,high,2,3.09,196,326.176,19.813,flagged,True,low,False
+scan_075.csv,injected_anomaly,moderate,2,1.86,166,210.021,19.813,flagged,True,high,False
+scan_076.csv,injected_anomaly,high,2,2.38,150,191.796,19.813,flagged,True,low,False
+scan_077.csv,injected_anomaly,moderate,2,1.4,189,93.174,19.813,flagged,True,high,False
+scan_078.csv,normal_like,,0,0.0,182,12.179,19.813,not flagged,True,,
+scan_079.csv,injected_anomaly,high,3,3.45,160,63.817,19.813,flagged,True,moderate,False
+scan_080.csv,normal_like,,0,0.0,192,10.565,19.813,not flagged,True,,
+scan_081.csv,injected_anomaly,high,2,2.1,181,101.378,19.813,flagged,True,moderate,False
+scan_082.csv,normal_like,,0,0.0,186,14.874,19.813,not flagged,True,,
+scan_083.csv,normal_like,,0,0.0,158,12.982,19.813,not flagged,True,,
+scan_084.csv,normal_like,,0,0.0,179,17.146,19.813,not flagged,True,,
+scan_085.csv,normal_like,,0,0.0,198,10.319,19.813,not flagged,True,,
+scan_086.csv,normal_like,,0,0.0,128,14.663,19.813,not flagged,True,,
+scan_087.csv,injected_anomaly,low,1,0.79,138,19.373,19.813,not flagged,False,,
+scan_088.csv,normal_like,,0,0.0,172,13.769,19.813,not flagged,True,,
+scan_089.csv,normal_like,,0,0.0,178,12.381,19.813,not flagged,True,,
+scan_090.csv,normal_like,,0,0.0,131,14.078,19.813,not flagged,True,,
+scan_091.csv,normal_like,,0,0.0,128,11.076,19.813,not flagged,True,,
+scan_092.csv,injected_anomaly,high,2,2.04,126,161.984,19.813,flagged,True,low,False
+scan_093.csv,injected_anomaly,low,1,1.05,197,36.895,19.813,flagged,True,moderate,False
+scan_094.csv,normal_like,,0,0.0,160,13.905,19.813,not flagged,True,,
+scan_095.csv,injected_anomaly,high,2,3.4,173,122.598,19.813,flagged,True,low,False
+scan_096.csv,normal_like,,0,0.0,164,14.543,19.813,not flagged,True,,
+scan_097.csv,normal_like,,0,0.0,121,13.165,19.813,not flagged,True,,
+scan_098.csv,normal_like,,0,0.0,200,12.148,19.813,not flagged,True,,
+scan_099.csv,normal_like,,0,0.0,163,17.971,19.813,not flagged,True,,
+scan_100.csv,normal_like,,0,0.0,171,14.839,19.813,not flagged,True,,

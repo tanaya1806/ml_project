@@ -1,0 +1,3588 @@
+{
+ "note": "Synthetic anomaly-injection scans, not patient data. Labels: injected anomaly vs normal-like.",
+ "n": 100,
+ "n_anomaly": 50,
+ "n_normal": 50,
+ "arms": {
+  "few_shot_only": {
+   "correct": 60,
+   "accuracy": 0.6,
+   "tp": 14,
+   "fn": 36,
+   "fp": 4,
+   "tn": 46,
+   "flagged": 18,
+   "per_trial_accuracy": [
+    0.56,
+    0.62,
+    0.49,
+    0.6,
+    0.57
+   ]
+  },
+  "random": {
+   "correct": 56,
+   "accuracy": 0.56,
+   "tp": 20,
+   "fn": 30,
+   "fp": 14,
+   "tn": 36,
+   "flagged": 34,
+   "per_trial_accuracy": [
+    0.53,
+    0.54,
+    0.44,
+    0.48,
+    0.52
+   ]
+  },
+  "structure_aware": {
+   "correct": 53,
+   "accuracy": 0.53,
+   "tp": 29,
+   "fn": 21,
+   "fp": 26,
+   "tn": 24,
+   "flagged": 55,
+   "per_trial_accuracy": [
+    0.46,
+    0.54,
+    0.52,
+    0.55,
+    0.56
+   ]
+  },
+  "screening_detector": {
+   "correct": 96,
+   "accuracy": 0.96,
+   "tp": 46,
+   "fn": 4,
+   "fp": 0,
+   "tn": 50,
+   "flagged": 46,
+   "per_trial_accuracy": []
+  },
+  "persistence_baseline": {
+   "correct": 90,
+   "accuracy": 0.9,
+   "tp": 40,
+   "fn": 10,
+   "fp": 0,
+   "tn": 50,
+   "flagged": 40,
+   "per_trial_accuracy": []
+  },
+  "static_baseline": {
+   "correct": 93,
+   "accuracy": 0.93,
+   "tp": 43,
+   "fn": 7,
+   "fp": 0,
+   "tn": 50,
+   "flagged": 43,
+   "per_trial_accuracy": []
+  }
+ },
+ "scans": [
+  {
+   "file": "scan_001.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.353,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.447,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.561,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 15.444,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 19.364,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.459,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_002.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.0,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.197,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.492,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 95.503,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 71.397,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 12.666,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_003.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.329,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.441,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.511,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 14.486,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 14.772,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.453,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_004.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.327,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.49,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.443,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 11.969,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.113,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.047,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_005.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.597,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.775,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.534,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 137.065,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 180.412,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 16.448,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_006.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.042,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.587,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.512,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 18.523,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.327,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.035,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_007.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.457,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.452,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.41,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 11.422,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.219,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.046,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_008.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.2,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.448,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.75,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 193.944,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 150.534,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 23.333,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_009.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.457,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.401,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.434,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 49.694,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 53.158,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 7.126,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_010.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.119,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.476,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.487,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 16.503,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 19.473,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.238,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_011.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.118,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.421,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.54,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 15.739,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.54,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.565,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_012.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.414,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.477,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.422,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 14.084,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 13.953,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.142,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_013.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.414,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.53,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.486,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 42.54,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 30.222,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.947,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_014.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.414,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.697,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.751,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 131.377,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 85.618,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 15.568,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_015.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.4,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.399,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.705,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 116.768,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 94.845,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 14.585,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_016.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.443,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.405,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.546,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 89.342,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 65.0,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 12.16,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_017.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.038,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.39,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.795,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 210.588,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 167.175,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 25.771,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_018.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.249,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.379,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.817,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 91.886,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 66.336,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 13.465,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_019.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.627,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.397,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.568,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 210.31,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 124.412,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 22.446,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_020.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.019,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.4,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.414,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 15.455,
+    "flagged": false,
+    "correct": false
+   },
+   "persistence_baseline": {
+    "prob": 16.919,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 2.404,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_021.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.031,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.235,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.584,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 105.152,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 81.223,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 13.082,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_022.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.28,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.469,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.535,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.365,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 14.048,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.235,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_023.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.069,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.467,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.517,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 15.114,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 19.487,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.311,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_024.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.232,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.482,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.586,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 14.535,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.625,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.318,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_025.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.287,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.457,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.459,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 27.092,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 25.948,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 4.476,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_026.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.225,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.393,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.464,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 12.322,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 12.505,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.382,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_027.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.595,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.429,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.483,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 72.37,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 70.585,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 10.134,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_028.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.396,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.527,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.515,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.804,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.026,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.941,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_029.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.528,
+    "flagged": true,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.492,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.431,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 10.475,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 10.546,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.021,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_030.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.108,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.244,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.681,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 55.087,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 45.881,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.228,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_031.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.797,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.633,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.41,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 62.023,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 65.523,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 9.48,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_032.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.049,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.463,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.603,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 17.228,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.187,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.526,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_033.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.093,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.532,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.446,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 23.888,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 30.286,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 5.598,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_034.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.2,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.582,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.46,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 298.665,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 176.95,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 29.661,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_035.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.21,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.366,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.583,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 40.382,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 40.193,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 5.478,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_036.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.246,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.485,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.43,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 11.893,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.535,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 3.148,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_037.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.121,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.476,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.519,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 13.671,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.073,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.022,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_038.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.085,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.372,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.599,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 19.206,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 23.108,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.714,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_039.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.193,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.461,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.478,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 24.921,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 21.901,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 4.061,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_040.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.458,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.518,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.457,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 25.581,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 26.23,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 4.772,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_041.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.548,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.622,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.556,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 33.899,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 30.501,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 3.766,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_042.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.811,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.452,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.612,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 48.963,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 49.113,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 8.064,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_043.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.442,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.504,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.467,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 16.046,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 21.42,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.503,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_044.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.129,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.524,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.429,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 11.793,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 12.938,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.06,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_045.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.4,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.58,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.399,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 158.792,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 97.073,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 18.776,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_046.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.061,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.521,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.468,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 17.554,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 22.352,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.277,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_047.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.123,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.461,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.507,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.356,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.798,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.564,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_048.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.217,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.426,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.512,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 13.968,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 13.097,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.088,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_049.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.52,
+    "flagged": true,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.459,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.421,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 12.343,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.587,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.857,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_050.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.159,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.504,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.503,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 10.849,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 10.715,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.46,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_051.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.046,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.599,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.511,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 61.891,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 53.026,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 8.821,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_052.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.075,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.567,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.242,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 71.64,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 61.359,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 10.737,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_053.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.226,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.432,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.491,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 14.598,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 13.76,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.696,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_054.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.149,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.515,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.406,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.841,
+    "flagged": false,
+    "correct": false
+   },
+   "persistence_baseline": {
+    "prob": 15.014,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 3.556,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_055.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.192,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.24,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.465,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 34.815,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 33.775,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.521,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_056.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.601,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.387,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.238,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 283.445,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 107.429,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 32.206,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_057.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.207,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.522,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.46,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 11.93,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 13.6,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.472,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_058.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.35,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.413,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.468,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 13.882,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.512,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.064,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_059.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.12,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.627,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.739,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 56.991,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 56.15,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.03,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_060.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.696,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.609,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.358,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 34.729,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 26.618,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.125,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_061.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.183,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.46,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.44,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 13.742,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.527,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.3,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_062.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.287,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.489,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.551,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.406,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 14.933,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.563,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_063.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.792,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.626,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.523,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 30.464,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 25.082,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 4.865,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_064.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.197,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.443,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.622,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 126.016,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 89.509,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 16.778,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_065.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.185,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.401,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.414,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 28.608,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 24.852,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 4.664,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_066.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.251,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.403,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.484,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 15.819,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.462,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.174,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_067.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.257,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.54,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.482,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 15.018,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.326,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.246,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_068.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.8,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.254,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.716,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 225.079,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 220.832,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 25.267,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_069.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.407,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.52,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.496,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 12.206,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.414,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.727,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_070.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.585,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.528,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.479,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 22.505,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 22.644,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 2.657,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_071.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.231,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.35,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.506,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 30.293,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 25.697,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 4.897,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_072.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.365,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.367,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.527,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 25.219,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 30.877,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 5.218,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_073.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.138,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.531,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.416,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 16.371,
+    "flagged": false,
+    "correct": false
+   },
+   "persistence_baseline": {
+    "prob": 16.346,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 2.707,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_074.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.2,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.299,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.541,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 326.176,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 282.527,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 35.117,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_075.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.4,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.561,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.771,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 210.021,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 166.539,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 24.789,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_076.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.762,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.9,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.695,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 191.796,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 129.669,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 19.975,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_077.csv",
+   "truth": "injected anomaly",
+   "strength": "moderate",
+   "few_shot_only": {
+    "prob": 0.786,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.463,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.648,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 93.174,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 67.555,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 14.381,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_078.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.126,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.491,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.505,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.179,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.652,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.366,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_079.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.2,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.32,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.467,
+    "flagged": false,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 63.817,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 64.715,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 6.852,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_080.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.2,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.516,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.483,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 10.565,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 12.164,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.744,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_081.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.0,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.274,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.692,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 101.378,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 65.147,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 12.501,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_082.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.485,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.564,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.487,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 14.874,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.278,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.944,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_083.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.047,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.412,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.554,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 12.982,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.364,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.655,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_084.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.201,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.481,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.546,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 17.146,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.345,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.361,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_085.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.231,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.481,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.558,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 10.319,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 13.412,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.945,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_086.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.669,
+    "flagged": true,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.504,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.541,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 14.663,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 19.538,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.49,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_087.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.489,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.439,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.538,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 19.373,
+    "flagged": false,
+    "correct": false
+   },
+   "persistence_baseline": {
+    "prob": 17.33,
+    "flagged": false,
+    "correct": false
+   },
+   "static_baseline": {
+    "prob": 1.925,
+    "flagged": false,
+    "correct": false
+   }
+  },
+  {
+   "file": "scan_088.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.057,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.462,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.438,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 13.769,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.864,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.301,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_089.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.262,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.499,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.418,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 12.381,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 17.165,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.922,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_090.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.616,
+    "flagged": true,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.484,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.552,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 14.078,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.536,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.213,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_091.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.405,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.425,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.509,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 11.076,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 15.561,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.212,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_092.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.203,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.425,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.545,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 161.984,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 112.439,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 20.32,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_093.csv",
+   "truth": "injected anomaly",
+   "strength": "low",
+   "few_shot_only": {
+    "prob": 0.224,
+    "flagged": false,
+    "correct": false
+   },
+   "random": {
+    "prob": 0.3,
+    "flagged": false,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.505,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 36.895,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 38.258,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 5.301,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_094.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.437,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.574,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.533,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 13.905,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.088,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.505,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_095.csv",
+   "truth": "injected anomaly",
+   "strength": "high",
+   "few_shot_only": {
+    "prob": 0.602,
+    "flagged": true,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.679,
+    "flagged": true,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.67,
+    "flagged": true,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 122.598,
+    "flagged": true,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 120.788,
+    "flagged": true,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 12.427,
+    "flagged": true,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_096.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.086,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.434,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.424,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 14.543,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 18.755,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.225,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_097.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.187,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.442,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.531,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 13.165,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.305,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.152,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_098.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.137,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.407,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.425,
+    "flagged": false,
+    "correct": true
+   },
+   "screening_detector": {
+    "prob": 12.148,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 16.726,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.184,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_099.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.211,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.499,
+    "flagged": false,
+    "correct": true
+   },
+   "structure_aware": {
+    "prob": 0.585,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 17.971,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 21.411,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 2.671,
+    "flagged": false,
+    "correct": true
+   }
+  },
+  {
+   "file": "scan_100.csv",
+   "truth": "normal-like",
+   "strength": "",
+   "few_shot_only": {
+    "prob": 0.088,
+    "flagged": false,
+    "correct": true
+   },
+   "random": {
+    "prob": 0.532,
+    "flagged": true,
+    "correct": false
+   },
+   "structure_aware": {
+    "prob": 0.513,
+    "flagged": true,
+    "correct": false
+   },
+   "screening_detector": {
+    "prob": 14.839,
+    "flagged": false,
+    "correct": true
+   },
+   "persistence_baseline": {
+    "prob": 20.432,
+    "flagged": false,
+    "correct": true
+   },
+   "static_baseline": {
+    "prob": 1.984,
+    "flagged": false,
+    "correct": true
+   }
+  }
+ ]
+}
