@@ -1,0 +1,11 @@
+Model,Low,Moderate,High,False alarms (normal-like)
+Temporal subgraph detector (proposed),76%,100%,100%,0%
+Whole-brain GIN+GRU,18%,65%,94%,0%
+Static score,65%,94%,100%,0%
+Persistence score,41%,100%,100%,0%
+One-class SVM,47%,88%,100%,2%
+Isolation forest,12%,76%,94%,0%
+Autoencoder (normative),47%,88%,100%,2%
+Few-shot head,18%,24%,44%,8%
+Few-shot + random anomalies,41%,53%,25%,28%
+Few-shot + structure-aware anomalies,41%,53%,81%,52%

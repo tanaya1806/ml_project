@@ -24,9 +24,9 @@ pdf = os.path.join(work, "fig1_tmp.pdf")
 bb = subprocess.run(["pdftotext", "-bbox", pdf, "-"], capture_output=True, text=True).stdout
 pages = bb.split("<page ")[1:]
 for pn, pg in enumerate(pages, 1):
-    if "architecture" in pg and "diagram." in pg: break
+    if "architecture" in pg and "proposed" in pg and "Novel" in pg: break
 words = re.findall(r'<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">([^<]*)</word>', pg)
-cap = [w for w in words if w[4] == "architecture"][0]
+cap = [words[i] for i in range(len(words) - 1) if words[i][4] == "architecture" and words[i + 1][4] == "of"][-1]
 cap_y = float(cap[1])
 first = [w for w in words if w[4] == "DATA" and float(w[1]) < cap_y][0]; top_y = float(first[1]) - 12
 cap_x = float(cap[0])

@@ -77,6 +77,7 @@ input:focus,select:focus{outline:2px solid var(--teal-l);border-color:var(--teal
 .scale div.on{color:#fff;border-color:transparent}
 .scale .low.on{background:#3e9b83}.scale .moderate.on{background:#d98a2b}.scale .high.on{background:#c0503f}
 .sev .lvl{font-size:20px;font-weight:700;color:var(--navy)}
+.sev .sevnote{font-size:12px;color:var(--mute);margin-top:4px}
 .sev.na{background:var(--bg);color:var(--mute);display:flex;flex-direction:column;justify-content:center}
 .actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
 .note{margin-top:18px;font-size:12.5px;color:var(--mute);border-top:1px solid var(--line);padding-top:12px}
@@ -220,7 +221,7 @@ tr.wrong td{background:#fff5f4}
       </div>
       <div class="actions"><button class="btn ghost" id="print">Print report</button><button class="btn ghost" id="again">New screening</button></div>
       <div class="warnbar" id="savewarn">The result could not be saved to the patient records. Please note it down before leaving this page.</div>
-      <div class="note">This service is a research prototype and gives a screening indication only. It is not a medical diagnosis. Please consult a qualified clinician for assessment.</div>
+      <div class="note">This service is a research prototype and gives a screening indication only. It is not a medical diagnosis. Please consult a qualified clinician for assessment. On real ABIDE patients the underlying model performs at about chance level, so this result must not be used for clinical decisions.</div>
     </div>
     <div class="card" id="records" style="margin-top:22px"><h2>Recent screenings</h2>
       <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Patient</th><th>ID</th><th>Age / Sex</th><th>Result</th><th>Severity</th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -231,9 +232,14 @@ tr.wrong td{background:#fff5f4}
 
   <div id="compare" class="page">
     <div class="card">
-      <h2>Same 100 test scans, six approaches</h2>
+      <h2 id="ctitle">Same 100 test scans, ten approaches</h2>
       <p class="cn" id="cintro"></p>
       <div style="overflow-x:auto"><table id="sumtbl"><thead><tr><th>Approach</th><th>Correct (of 100)</th><th style="width:34%">Accuracy</th><th>Changes missed</th><th>False alarms</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:22px">
+      <h2>Real patients: every approach is near chance</h2>
+      <p class="cn" id="rintro"></p>
+      <div style="overflow-x:auto"><table id="realtbl"><thead><tr><th>Approach</th><th>AUROC [95% interval]</th><th>Accuracy</th></tr></thead><tbody></tbody></table></div>
     </div>
     <div class="card" style="margin-top:22px">
       <h2>Scan-by-scan results</h2>
@@ -286,7 +292,8 @@ async function renderConn(x){
 }
 
 // ---------- Model comparison tab ----------
-const MODELS=[['screening_detector','Temporal subgraph detector','The model used in the Screening tab'],['static_baseline','Static scoring baseline','Looks at each moment on its own'],['persistence_baseline','Persistence scoring baseline','Compares each moment with the one before'],['few_shot_only','Few-shot only','Trained on 10 real ASD scans'],['random','Few-shot + random anomalies','Adds randomly edited examples'],['structure_aware','Few-shot + structure-aware anomalies','Adds guided edits of real connections']];
+const MODELS=[['screening_detector','Proposed detector','Temporal subgraph GIN+GRU, the model used in the Screening tab'],['static_baseline','Static score','Looks at each moment on its own'],['persistence_baseline','Persistence score','Compares each moment with the one before'],['ocsvm','One-class SVM','Learns the normal range from control scans'],['iforest','Isolation forest','Picks out scans that are easy to isolate from controls'],['autoencoder','Autoencoder','Rebuilds a normal scan; a large error means unusual'],['whole_brain_gin_gru','Whole-brain GIN+GRU','Same model, but looks at the whole brain instead of sub-networks'],['few_shot_only','Few-shot head','Trained on 10 real ASD scans'],['random','Few-shot + random anomalies','Adds randomly edited examples'],['structure_aware','Few-shot + guided anomalies','Adds guided edits of real connections']];
+const WORDS=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
 let CMP=null,cmodel='screening_detector',cfilter='all';
 async function loadCompare(){
   if(CMP)return;
@@ -303,13 +310,18 @@ function buildCompare(){
   $('mseg').innerHTML=MODELS.map(m=>`<button data-m="${m[0]}">${m[1]}</button>`).join('');
   document.querySelectorAll('#mseg button').forEach(b=>b.onclick=()=>{cmodel=b.dataset.m;drawCompare()});
   document.querySelectorAll('#chips button').forEach(b=>b.onclick=()=>{cfilter=b.dataset.f;drawCompare()});
-  const g=k=>pct(A[k].accuracy),mn=Math.min(g('few_shot_only'),g('random'),g('structure_aware')),mxs=Math.max(g('few_shot_only'),g('random'),g('structure_aware'));
-  const rest=Math.max(g('static_baseline'),g('persistence_baseline'));
+  $('ctitle').textContent=`Same ${CMP.n} test scans, ${WORDS[MODELS.length]} approaches`;
+  const g=k=>pct(A[k].accuracy),fs=['few_shot_only','random','structure_aware'],mn=Math.min(...fs.map(g)),mxs=Math.max(...fs.map(g));
+  const others=MODELS.slice(1,7).map(m=>m[0]),bk=others.reduce((a,k)=>g(k)>g(a)?k:a,others[0]),bname=MODELS.find(m=>m[0]===bk)[1];
+  const R=CMP.real_test;
+  if(R){$('rintro').textContent=`${R.n} real held-out ABIDE patients (ASD versus control), not synthetic scans. AUROC 0.5 means no better than chance. The intervals overlap, so no approach is clearly better than another here.`;
+    $('realtbl').querySelector('tbody').innerHTML=MODELS.filter(m=>R.models[m[0]]).map(m=>{const r=R.models[m[0]];return `<tr><td><span class="mname">${m[1]}</span></td><td><b>${r.auroc.toFixed(3)}</b> [${r.ci.auroc[0].toFixed(2)}, ${r.ci.auroc[1].toFixed(2)}]</td><td>${pct(r.accuracy)}%</td></tr>`}).join('')}
+  else $('realtbl').closest('.card').style.display='none';
   $('cnotes').innerHTML=[
     'These scans are synthetic test data created for this project, not patients. "Changed" means a connectivity change was injected into a sub-network. That is not the same as autism, so these figures show how well each approach notices such changes, not diagnostic accuracy.',
-    `The temporal subgraph detector got ${A.screening_detector.correct} of ${CMP.n} right (${A.screening_detector.fn} changes missed, ${A.screening_detector.fp} false alarms). The best simpler scoring baseline got ${rest}% against its ${g('screening_detector')}%, so on this set the advantage over those baselines is ${g('screening_detector')-rest} percentage points.`,
-    `The three few-shot approaches were trained to recognise ASD in real scans and transfer poorly to this set: ${mn}-${mxs}% correct. Adding generated anomalies did not improve them here (few-shot only ${g('few_shot_only')}%, with random anomalies ${g('random')}%, with structure-aware anomalies ${g('structure_aware')}%).`,
-    'The test set was built by injecting sub-network changes, so it favours approaches that look at sub-networks. On real held-out ABIDE patients every approach stays near chance level, so none of these numbers should be read as evidence of clinical accuracy.'
+    `The proposed detector got ${A.screening_detector.correct} of ${CMP.n} right (${A.screening_detector.fn} changes missed, ${A.screening_detector.fp} false alarms). The best other approach, ${bname}, got ${g(bk)}%, so the advantage is ${g('screening_detector')-g(bk)} percentage points. The whole-brain GIN+GRU got ${g('whole_brain_gin_gru')}%, so looking at sub-networks adds ${g('screening_detector')-g('whole_brain_gin_gru')} points.`,
+    `The three few-shot approaches were trained to recognise ASD in real scans and transfer poorly to this set: ${mn}-${mxs}% correct. Adding generated anomalies did not improve them here (few-shot head ${g('few_shot_only')}%, with random anomalies ${g('random')}%, with guided anomalies ${g('structure_aware')}%).`,
+    'The test set was built by injecting sub-network changes, so it favours approaches that look at sub-networks. On real held-out ABIDE patients every approach stays near chance level (see the table above), so none of these numbers should be read as evidence of clinical accuracy.'
   ].map(t=>`<li>${t}</li>`).join('');
   drawCompare();
 }
@@ -324,7 +336,7 @@ function drawCompare(){
   $('dtbl').querySelector('tbody').innerHTML=rows.map(s=>{const r=s[cmodel];return `<tr class="${r.correct?'':'wrong'}"><td>${s.file.replace('.csv','')}</td><td>${s.truth==='injected anomaly'?'Change injected':'Normal-like'}</td><td>${s.strength?cap(s.strength):'&ndash;'}</td><td>${r.flagged?'Flagged':'Not flagged'}</td><td>${r.correct?'<span class="ok">&#10003; Correct</span>':'<span class="bad">&#10007; Incorrect</span>'}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">No scans match this filter.</td></tr>';
 }
 
-const HERO={screen:['Autism Screening Service',"Upload a patient's brain scan to receive a screening result and, where indicated, the severity level."],compare:['Model Comparison','The same 100 test scans, checked by six different approaches.']};
+const HERO={screen:['Autism Screening Service',"Upload a patient's brain scan to receive a screening result and, where indicated, the severity level."],compare:['Model Comparison','The same 100 test scans, checked by ten different approaches.']};
 function show(p){['screen','compare'].forEach(x=>$(x).classList.toggle('on',x===p));$('n1').classList.toggle('on',p==='screen');$('n2').classList.toggle('on',p==='compare');$('htitle').textContent=HERO[p][0];$('hsub').textContent=HERO[p][1];if(p==='compare')loadCompare();else drawRows()}
 $('n1').onclick=()=>show('screen');$('n2').onclick=()=>show('compare');
 
@@ -345,7 +357,7 @@ function render(r,saved){
   const icon=yes?'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 7v6M12 17h.01"/></svg>':'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
   const v=`<div class="verdict ${yes?'yes':'no'}"><div class="vic">${icon}</div><div><small>Screening result</small><div class="t">${yes?'Autism indicators detected':'No autism indicators detected'}</div></div></div>`;
   let s;
-  if(yes){const b=r.severity;s=`<div class="sev"><small>Severity level</small><div class="scale"><div class="low ${b==='low'?'on':''}">Low</div><div class="moderate ${b==='moderate'?'on':''}">Moderate</div><div class="high ${b==='high'?'on':''}">High</div></div><div class="lvl">${cap(b)} severity</div></div>`}
+  if(yes){const b=r.severity;s=`<div class="sev"><small>Severity level</small><div class="scale"><div class="low ${b==='low'?'on':''}">Low</div><div class="moderate ${b==='moderate'?'on':''}">Moderate</div><div class="high ${b==='high'?'on':''}">High</div></div><div class="lvl">${cap(b)} severity</div><div class="sevnote">Exploratory estimate; not validated against clinical severity scores.</div></div>`}
   else s=`<div class="sev na"><small>Severity level</small><div style="margin-top:6px">Not applicable</div></div>`;
   $('res').innerHTML=v+s;
   window.lastFlag=yes;renderConn(r.explain);
